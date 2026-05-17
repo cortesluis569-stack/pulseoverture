@@ -1,0 +1,617 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cotización — Pulse Overture</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: #04040C;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 32px 16px;
+    font-family: 'DM Sans', sans-serif;
+    overflow-x: hidden;
+  }
+
+  canvas {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  .wrap {
+    width: 100%;
+    max-width: 600px;
+    position: relative;
+    z-index: 1;
+  }
+
+  .header {
+    background: linear-gradient(135deg, rgba(8,13,80,0.95) 0%, rgba(13,18,96,0.95) 100%);
+    backdrop-filter: blur(20px);
+    border-radius: 16px 16px 0 0;
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    border: 0.5px solid rgba(59,69,224,0.5);
+    border-bottom: none;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .header::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(59,69,224,0.8), rgba(244,121,32,0.8), transparent);
+  }
+
+  .header-text .brand-main {
+    font-family: 'Syne', sans-serif;
+    font-size: 26px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.04em;
+    line-height: 1;
+  }
+
+  .header-text .brand-sub {
+    font-size: 10px;
+    font-weight: 600;
+    color: #F47920;
+    letter-spacing: 7px;
+    margin-top: 2px;
+  }
+
+  .header-text .brand-desc {
+    font-size: 13px;
+    color: rgba(255,255,255,0.55);
+    margin-top: 10px;
+    font-weight: 400;
+    line-height: 1.5;
+  }
+
+  .body {
+    background: rgba(7,7,15,0.92);
+    backdrop-filter: blur(20px);
+    border: 0.5px solid rgba(59,69,224,0.3);
+    border-top: none;
+    border-radius: 0 0 16px 16px;
+    padding: 32px;
+  }
+
+  .section-label {
+    font-size: 10px;
+    font-weight: 600;
+    color: #F47920;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    margin-bottom: 18px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+
+  .section-label::after {
+    content: '';
+    flex: 1;
+    height: 1px;
+    background: linear-gradient(90deg, rgba(59,69,224,0.3), transparent);
+  }
+
+  .divider {
+    border: none;
+    border-top: 0.5px solid rgba(59,69,224,0.15);
+    margin: 24px 0;
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px;
+    margin-bottom: 14px;
+  }
+
+  @media (max-width: 480px) {
+    .grid { grid-template-columns: 1fr; }
+    .header { padding: 22px 20px; }
+    .body { padding: 24px 20px; }
+  }
+
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin-bottom: 14px;
+  }
+
+  .field:last-child { margin-bottom: 0; }
+
+  label {
+    font-size: 12px;
+    font-weight: 600;
+    color: rgba(255,255,255,0.75);
+    letter-spacing: 0.02em;
+  }
+
+  label .req { color: #F47920; margin-left: 2px; }
+
+  input, select, textarea {
+    background: rgba(255,255,255,0.04);
+    border: 0.5px solid rgba(59,69,224,0.3);
+    border-radius: 10px;
+    padding: 11px 14px;
+    font-family: 'DM Sans', sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    color: #fff;
+    width: 100%;
+    outline: none;
+    transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  }
+
+  input::placeholder, textarea::placeholder { color: rgba(255,255,255,0.25); }
+
+  input:focus, select:focus, textarea:focus {
+    border-color: #F47920;
+    background: rgba(244,121,32,0.05);
+    box-shadow: 0 0 0 3px rgba(244,121,32,0.08);
+  }
+
+  input.filled, select.filled, textarea.filled {
+    border-color: rgba(59,69,224,0.55);
+    background: rgba(59,69,224,0.05);
+  }
+
+  select {
+    appearance: none;
+    cursor: pointer;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='rgba(255,255,255,0.3)' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    padding-right: 36px;
+  }
+
+  select option { background: #0D1260; color: #fff; }
+
+  textarea {
+    resize: vertical;
+    min-height: 90px;
+    line-height: 1.5;
+  }
+
+  .alert {
+    border-radius: 10px;
+    padding: 12px 16px;
+    font-size: 13px;
+    font-weight: 500;
+    margin-bottom: 16px;
+    display: none;
+    line-height: 1.4;
+  }
+
+  .alert-err {
+    background: rgba(226,75,74,0.1);
+    border: 0.5px solid rgba(226,75,74,0.35);
+    color: #F09595;
+  }
+
+  .btn {
+    width: 100%;
+    background: linear-gradient(135deg, #F47920, #FF9A40);
+    border: none;
+    border-radius: 12px;
+    padding: 15px;
+    font-family: 'Syne', sans-serif;
+    font-size: 15px;
+    font-weight: 800;
+    color: #fff;
+    letter-spacing: 0.06em;
+    cursor: pointer;
+    margin-top: 8px;
+    transition: transform 0.15s, box-shadow 0.15s, opacity 0.15s;
+    position: relative;
+  }
+
+  .btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(244,121,32,0.35);
+  }
+
+  .btn:active { transform: scale(0.98); }
+  .btn:disabled { opacity: 0.5; cursor: not-allowed; transform: none; box-shadow: none; }
+
+  /* Success */
+  .success-wrap {
+    display: none;
+    text-align: center;
+    padding: 48px 32px;
+  }
+
+  .success-icon {
+    width: 72px; height: 72px;
+    background: rgba(37,211,102,0.1);
+    border: 1px solid rgba(37,211,102,0.3);
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    margin: 0 auto 24px;
+    font-size: 32px;
+    animation: pop 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+
+  @keyframes pop {
+    from { transform: scale(0); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+
+  .success-title {
+    font-family: 'Syne', sans-serif;
+    font-size: 24px;
+    font-weight: 800;
+    color: #fff;
+    margin-bottom: 12px;
+  }
+
+  .success-sub {
+    font-size: 14px;
+    color: rgba(255,255,255,0.5);
+    line-height: 1.7;
+    max-width: 380px;
+    margin: 0 auto;
+  }
+
+  .success-sub strong { color: #F47920; }
+
+  .footer {
+    text-align: center;
+    font-size: 11px;
+    color: rgba(255,255,255,0.18);
+    margin-top: 20px;
+    line-height: 1.6;
+  }
+
+  .footer a { color: rgba(244,121,32,0.4); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<canvas id="neural"></canvas>
+
+<div class="wrap">
+  <div class="header">
+    <svg width="48" height="48" viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg" style="flex-shrink:0">
+      <rect x="6" y="28" width="7" height="12" rx="2" fill="#3B45E0" opacity="0.55"/>
+      <rect x="15" y="20" width="7" height="20" rx="2" fill="#4B56FF" opacity="0.75"/>
+      <rect x="24" y="13" width="7" height="27" rx="2" fill="#5B66FF"/>
+      <rect x="33" y="4" width="7" height="36" rx="2" fill="url(#og)"/>
+      <defs>
+        <linearGradient id="og" x1="36.5" y1="4" x2="36.5" y2="40" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#FFB060"/>
+          <stop offset="100%" stop-color="#8B3000"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="header-text">
+      <div class="brand-main">PULSE</div>
+      <div class="brand-sub">OVERTURE</div>
+      <div class="brand-desc">Cuéntanos sobre tu negocio y<br>te armamos una propuesta personalizada</div>
+    </div>
+  </div>
+
+  <div class="body">
+    <div id="form-content">
+
+      <p class="section-label">Datos de contacto</p>
+
+      <div class="grid">
+        <div class="field">
+          <label>Nombre completo <span class="req">*</span></label>
+          <input id="nombre" type="text" placeholder="¿Cómo te llamas?" oninput="markFilled(this)"/>
+        </div>
+        <div class="field">
+          <label>Correo electrónico <span class="req">*</span></label>
+          <input id="email" type="email" placeholder="tu@correo.com" oninput="markFilled(this)"/>
+        </div>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label>WhatsApp <span class="req">*</span></label>
+          <input id="whatsapp" type="tel" placeholder="+52 55 0000 0000" oninput="markFilled(this)"/>
+        </div>
+        <div class="field">
+          <label>Empresa / Marca</label>
+          <input id="empresa" type="text" placeholder="Nombre de tu negocio" oninput="markFilled(this)"/>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Sitio web</label>
+        <input id="web" type="url" placeholder="https://tunegocio.com" oninput="markFilled(this)"/>
+      </div>
+
+      <hr class="divider"/>
+      <p class="section-label">Tu negocio</p>
+
+      <div class="grid">
+        <div class="field">
+          <label>Industria o giro</label>
+          <select id="industria" onchange="markFilled(this)">
+            <option value="">¿A qué te dedicas?</option>
+            <option>Coaching / Mentoría</option>
+            <option>Infoproductos / Cursos</option>
+            <option>Inmobiliaria</option>
+            <option>Salud / Clínica</option>
+            <option>Gimnasio / Wellness</option>
+            <option>Restaurante / Food</option>
+            <option>Tecnología</option>
+            <option>Retail / E-commerce</option>
+            <option>Consultoría</option>
+            <option>Servicios financieros</option>
+            <option>Construcción</option>
+            <option>Otra</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>Facturación mensual aprox.</label>
+          <select id="facturacion_mes" onchange="markFilled(this)">
+            <option value="">Rango aproximado en USD</option>
+            <option>Menos de $500 USD</option>
+            <option>$500 - $1,500 USD</option>
+            <option>$1,500 - $3,000 USD</option>
+            <option>$3,000 - $7,000 USD</option>
+            <option>$7,000 - $15,000 USD</option>
+            <option>$15,000 - $50,000 USD</option>
+            <option>$50,000 - $100,000 USD</option>
+            <option>Más de $100,000 USD</option>
+          </select>
+        </div>
+      </div>
+
+      <hr class="divider"/>
+      <p class="section-label">Tu proyecto</p>
+
+      <div class="field">
+        <label>¿Qué servicio te interesa? <span class="req">*</span></label>
+        <select id="servicio" onchange="markFilled(this)">
+          <option value="">Selecciona una opción</option>
+          <option>Agente de IA para ventas en WhatsApp 24/7</option>
+          <option>Automatización de procesos internos</option>
+          <option>Chatbot de atención al cliente</option>
+          <option>Integración de IA con CRM o calendario</option>
+          <option>Consultoría de automatización</option>
+          <option>Otro</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>¿Qué problema quieres resolver? <span class="req">*</span></label>
+        <textarea id="problema_resolver" placeholder="Cuéntanos qué está pasando en tu negocio que quieres mejorar o automatizar. Sé específico — eso nos ayuda a darte una propuesta que realmente funcione." oninput="markFilled(this)"></textarea>
+      </div>
+
+      <div class="grid">
+        <div class="field">
+          <label>¿Cuánto piensas invertir?</label>
+          <select id="rango_presupuesto" onchange="markFilled(this)">
+            <option value="">Rango en USD</option>
+            <option>Menos de $200 USD</option>
+            <option>$200 - $500 USD</option>
+            <option>$500 - $1,000 USD</option>
+            <option>$1,000 - $3,000 USD</option>
+            <option>$3,000 - $10,000 USD</option>
+            <option>$10,000 - $30,000 USD</option>
+            <option>$30,000 - $100,000 USD</option>
+            <option>Más de $100,000 USD</option>
+          </select>
+        </div>
+        <div class="field">
+          <label>¿Presupuesto aprobado?</label>
+          <select id="presupuesto_aprobado" onchange="markFilled(this)">
+            <option value="">Selecciona</option>
+            <option>Sí, ya está aprobado</option>
+            <option>En proceso de aprobación</option>
+            <option>Todavía no, estoy explorando</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="alert alert-err" id="msg-error">⚠️ <span id="msg-error-text">Por favor completa los campos requeridos.</span></div>
+
+      <button class="btn" id="submit-btn" onclick="enviar()">ENVIAR MI COTIZACIÓN →</button>
+
+    </div>
+
+    <div class="success-wrap" id="success-wrap">
+      <div class="success-icon">🎯</div>
+      <div class="success-title">¡Lo recibimos!</div>
+      <p class="success-sub">Luis revisará tu caso y te contactará en <strong>menos de 24 horas</strong> con una propuesta personalizada para tu negocio.</p>
+    </div>
+  </div>
+
+  <div class="footer">
+    Pulse Overture — Automatización con IA para negocios en México<br>
+    <a href="https://pulseoverture.com">pulseoverture.com</a>
+  </div>
+</div>
+
+<script>
+// ── Neural Network Animation ──
+const canvas = document.getElementById('neural');
+const ctx = canvas.getContext('2d');
+let W, H, particles, mouse = { x: -9999, y: -9999 };
+
+const COLORS = {
+  blue: '59,69,224',
+  orange: '244,121,32',
+  white: '255,255,255'
+};
+
+function resize() {
+  W = canvas.width = window.innerWidth;
+  H = canvas.height = window.innerHeight;
+}
+
+function Particle() {
+  this.x = Math.random() * W;
+  this.y = Math.random() * H;
+  this.vx = (Math.random() - 0.5) * 0.4;
+  this.vy = (Math.random() - 0.5) * 0.4;
+  this.r = Math.random() * 2 + 1;
+  this.color = Math.random() < 0.6 ? COLORS.blue : Math.random() < 0.7 ? COLORS.orange : COLORS.white;
+  this.pulse = Math.random() * Math.PI * 2;
+  this.pulseSpeed = 0.02 + Math.random() * 0.02;
+}
+
+Particle.prototype.update = function() {
+  this.x += this.vx;
+  this.y += this.vy;
+  this.pulse += this.pulseSpeed;
+
+  // Mouse repulsion
+  const dx = this.x - mouse.x;
+  const dy = this.y - mouse.y;
+  const dist = Math.sqrt(dx * dx + dy * dy);
+  if (dist < 120) {
+    this.vx += dx / dist * 0.3;
+    this.vy += dy / dist * 0.3;
+  }
+
+  // Speed limit
+  const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+  if (speed > 1.5) { this.vx *= 0.95; this.vy *= 0.95; }
+
+  // Wrap
+  if (this.x < -10) this.x = W + 10;
+  if (this.x > W + 10) this.x = -10;
+  if (this.y < -10) this.y = H + 10;
+  if (this.y > H + 10) this.y = -10;
+};
+
+Particle.prototype.draw = function() {
+  const alpha = 0.5 + Math.sin(this.pulse) * 0.3;
+  ctx.beginPath();
+  ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+  ctx.fillStyle = `rgba(${this.color},${alpha})`;
+  ctx.fill();
+};
+
+function init() {
+  resize();
+  const count = Math.min(80, Math.floor(W * H / 14000));
+  particles = Array.from({ length: count }, () => new Particle());
+}
+
+function drawConnections() {
+  const maxDist = 140;
+  for (let i = 0; i < particles.length; i++) {
+    for (let j = i + 1; j < particles.length; j++) {
+      const a = particles[i], b = particles[j];
+      const dx = a.x - b.x, dy = a.y - b.y;
+      const dist = Math.sqrt(dx * dx + dy * dy);
+      if (dist < maxDist) {
+        const alpha = (1 - dist / maxDist) * 0.25;
+        // Color blend based on particles
+        const col = a.color === COLORS.orange || b.color === COLORS.orange
+          ? COLORS.orange : COLORS.blue;
+        ctx.beginPath();
+        ctx.moveTo(a.x, a.y);
+        ctx.lineTo(b.x, b.y);
+        ctx.strokeStyle = `rgba(${col},${alpha})`;
+        ctx.lineWidth = 0.6;
+        ctx.stroke();
+      }
+    }
+  }
+}
+
+function animate() {
+  ctx.clearRect(0, 0, W, H);
+  drawConnections();
+  particles.forEach(p => { p.update(); p.draw(); });
+  requestAnimationFrame(animate);
+}
+
+window.addEventListener('resize', () => { resize(); });
+window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+window.addEventListener('touchmove', e => {
+  mouse.x = e.touches[0].clientX;
+  mouse.y = e.touches[0].clientY;
+}, { passive: true });
+
+init();
+animate();
+
+// ── Form Logic ──
+var WEBHOOK_URL = 'https://pulse-overture-proyecto-n8n.xlbdc0.easypanel.host/webhook/webhook';
+
+function markFilled(el) {
+  el.classList.toggle('filled', el.value.trim().length > 0 && el.value !== '');
+}
+
+function enviar() {
+  var nombre = document.getElementById('nombre').value.trim();
+  var email = document.getElementById('email').value.trim();
+  var whatsapp = document.getElementById('whatsapp').value.trim();
+  var servicio = document.getElementById('servicio').value;
+  var problema = document.getElementById('problema_resolver').value.trim();
+  var err = document.getElementById('msg-error');
+  var errTxt = document.getElementById('msg-error-text');
+  var btn = document.getElementById('submit-btn');
+
+  err.style.display = 'none';
+
+  if (!nombre) { errTxt.textContent = 'El nombre es requerido.'; err.style.display = 'block'; return; }
+  if (!email || !email.includes('@')) { errTxt.textContent = 'Ingresa un email válido.'; err.style.display = 'block'; return; }
+  if (!whatsapp) { errTxt.textContent = 'El WhatsApp es requerido.'; err.style.display = 'block'; return; }
+  if (!servicio) { errTxt.textContent = 'Selecciona el servicio que te interesa.'; err.style.display = 'block'; return; }
+  if (!problema) { errTxt.textContent = 'Cuéntanos qué problema quieres resolver.'; err.style.display = 'block'; return; }
+
+  var payload = {
+    timestamp: new Date().toISOString(),
+    nombre: nombre,
+    email: email,
+    whatsapp: whatsapp,
+    empresa: document.getElementById('empresa').value.trim(),
+    web: document.getElementById('web').value.trim(),
+    industria: document.getElementById('industria').value,
+    facturacion_mes: document.getElementById('facturacion_mes').value,
+    servicio: servicio,
+    problema_resolver: problema,
+    rango_presupuesto: document.getElementById('rango_presupuesto').value,
+    presupuesto_aprobado: document.getElementById('presupuesto_aprobado').value
+  };
+
+  btn.textContent = 'ENVIANDO...';
+  btn.disabled = true;
+
+  fetch(WEBHOOK_URL, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ body: payload })
+  })
+  .then(function(r) {
+    if (r.ok) {
+      document.getElementById('form-content').style.display = 'none';
+      document.getElementById('success-wrap').style.display = 'block';
+    } else { throw new Error(); }
+  })
+  .catch(function() {
+    errTxt.textContent = 'Error al enviar. Intenta de nuevo en un momento.';
+    err.style.display = 'block';
+    btn.textContent = 'ENVIAR MI COTIZACIÓN →';
+    btn.disabled = false;
+  });
+}
+</script>
+</body>
+</html>
