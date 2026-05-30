@@ -3,1785 +3,468 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Pulse Overture — Sofía, la agente de IA que nunca duerme</title>
-<!-- Meta Pixel -->
-<script>
-!function(f,b,e,v,n,t,s){if(f.fbq)return;n=f.fbq=function(){n.callMethod?
-n.callMethod.apply(n,arguments):n.queue.push(arguments)};if(!f._fbq)f._fbq=n;
-n.push=n;n.loaded=!0;n.version='2.0';n.queue=[];t=b.createElement(e);t.async=!0;
-t.src=v;s=b.getElementsByTagName(e)[0];s.parentNode.insertBefore(t,s)}(window,
-document,'script','https://connect.facebook.net/en_US/fbevents.js');
-fbq('init','2171114313704082');
-fbq('track','PageView');
-</script>
-<noscript><img height="1" width="1" style="display:none" src="https://www.facebook.com/tr?id=2171114313704082&ev=PageView&noscript=1"/></noscript>
-<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&family=Raleway:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<title>Sofía — Demo en Vivo | Pulse Overture</title>
+<meta name="description" content="Habla con Sofía, el agente de IA que atiende, califica y cierra ventas por tu negocio 24/7.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-:root {
-  --blue: #3B45E0;
-  --blue2: #5B66FF;
-  --orange: #F47920;
-  --orange2: #FF9A40;
-  --bg: #04040C;
-  --surface: #080810;
-  --surface2: #0D0D1A;
-  --border: rgba(59,69,224,0.15);
-  --text: #F0F0F0;
-  --muted: rgba(255,255,255,0.45);
-  --sans: 'DM Sans', sans-serif;
-  --display: 'Syne', sans-serif;
-  --mono: 'JetBrains Mono', monospace;
-  --body: 'Raleway', sans-serif;
-}
-
-html { scroll-behavior: smooth; }
-
-body {
-  background: var(--bg);
-  color: var(--text);
-  font-family: var(--sans);
-  overflow-x: hidden;
-  cursor: none;
-}
-
-/* Custom cursor */
-.cursor {
-  width: 10px; height: 10px;
-  background: var(--orange);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9999;
-  transform: translate(-50%, -50%);
-  transition: transform 0.1s, width 0.2s, height 0.2s, background 0.2s;
-  mix-blend-mode: difference;
-}
-.cursor-ring {
-  width: 36px; height: 36px;
-  border: 1px solid rgba(244,121,32,0.4);
-  border-radius: 50%;
-  position: fixed;
-  pointer-events: none;
-  z-index: 9998;
-  transform: translate(-50%, -50%);
-  transition: transform 0.15s ease-out, width 0.3s, height 0.3s;
-}
-.cursor.hover { width: 20px; height: 20px; background: var(--blue2); }
-.cursor-ring.hover { width: 56px; height: 56px; border-color: rgba(91,102,255,0.3); }
-
-/* Scroll reveal */
-.reveal {
-  opacity: 0;
-  transform: translateY(40px);
-  transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1);
-}
-.reveal.visible { opacity: 1; transform: translateY(0); }
-.reveal-left { opacity: 0; transform: translateX(-40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
-.reveal-left.visible { opacity: 1; transform: translateX(0); }
-.reveal-right { opacity: 0; transform: translateX(40px); transition: opacity 0.8s cubic-bezier(0.16,1,0.3,1), transform 0.8s cubic-bezier(0.16,1,0.3,1); }
-.reveal-right.visible { opacity: 1; transform: translateX(0); }
-.delay-1 { transition-delay: 0.1s; }
-.delay-2 { transition-delay: 0.2s; }
-.delay-3 { transition-delay: 0.3s; }
-.delay-4 { transition-delay: 0.4s; }
-.delay-5 { transition-delay: 0.5s; }
-
-/* ─── NAV ─── */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 20px 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(4,4,12,0.7);
-  backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(59,69,224,0.08);
-  transition: padding 0.3s;
-}
-
-nav.scrolled { padding: 14px 48px; }
-
-.nav-logo {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  text-decoration: none;
-}
-
-.nav-logo svg { width: 32px; height: 32px; }
-
-.nav-brand {
-  display: flex;
-  flex-direction: column;
-  line-height: 1;
-}
-
-.nav-brand .brand-main {
-  font-family: var(--display);
-  font-size: 15px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: 0.06em;
-}
-
-.nav-brand .brand-sub {
-  font-size: 8px;
-  font-weight: 600;
-  color: var(--orange);
-  letter-spacing: 5px;
-  margin-top: 1px;
-}
-
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 36px;
-  list-style: none;
-}
-
-.nav-links a {
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--muted);
-  text-decoration: none;
-  letter-spacing: 0.02em;
-  transition: color 0.2s;
-}
-
-.nav-links a:hover { color: #fff; }
-
-.nav-cta {
-  background: var(--orange);
-  color: #fff !important;
-  padding: 10px 22px;
-  border-radius: 8px;
-  font-weight: 700 !important;
-  letter-spacing: 0.04em !important;
-  transition: background 0.2s, transform 0.15s !important;
-}
-
-.nav-cta:hover {
-  background: var(--orange2) !important;
-  transform: translateY(-1px) !important;
-  color: #fff !important;
-}
-
-/* ─── HERO ─── */
-#hero {
-  position: relative;
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  padding: 120px 48px 80px;
-}
-
-#hero-canvas {
-  position: absolute;
-  inset: 0;
-  width: 100%;
-  height: 100%;
-}
-
-.hero-content {
-  position: relative;
-  z-index: 2;
-  max-width: 800px;
-  text-align: center;
-}
-
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(59,69,224,0.1);
-  border: 1px solid rgba(59,69,224,0.25);
-  border-radius: 100px;
-  padding: 6px 16px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--blue2);
-  letter-spacing: 0.08em;
-  margin-bottom: 32px;
-}
-
-.badge-dot {
-  width: 6px; height: 6px;
-  background: var(--orange);
-  border-radius: 50%;
-  animation: pulse-badge 2s ease-in-out infinite;
-}
-
-@keyframes pulse-badge {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(0.8); }
-}
-
-.hero-h1 {
-  font-family: var(--display);
-  font-size: clamp(36px, 6vw, 72px);
-  font-weight: 800;
-  line-height: 1.05;
-  letter-spacing: -0.03em;
-  color: #fff;
-  margin-bottom: 24px;
-}
-
-.hero-h1 .line-orange { color: var(--orange); }
-.hero-h1 .line-strike {
-  position: relative;
-  color: var(--muted);
-}
-.hero-h1 .line-strike::after {
-  content: '';
-  position: absolute;
-  left: 0; right: 0;
-  top: 50%;
-  height: 3px;
-  background: var(--orange);
-  transform: rotate(-2deg);
-}
-
-.hero-sub {
-  font-family: var(--body);
-  font-size: 20px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.92);
-  line-height: 1.65;
-  max-width: 560px;
-  margin: 0 auto 20px;
-  letter-spacing: 0.01em;
-}
-
-.hero-proof {
-  font-family: var(--body);
-  font-size: 16px;
-  font-weight: 600;
-  color: rgba(255,255,255,0.85);
-  margin-bottom: 40px;
-  letter-spacing: 0.02em;
-}
-
-.hero-cta {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--orange);
-  color: #fff;
-  font-family: var(--display);
-  font-size: 15px;
-  font-weight: 700;
-  padding: 16px 36px;
-  border-radius: 12px;
-  text-decoration: none;
-  letter-spacing: 0.04em;
-  transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-cta::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.1));
-  pointer-events: none;
-}
-
-.hero-cta:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px rgba(244,121,32,0.35);
-  background: var(--orange2);
-}
-
-.hero-cta-arrow {
-  transition: transform 0.2s;
-}
-
-.hero-cta:hover .hero-cta-arrow { transform: translateX(4px); }
-
-.hero-scroll {
-  position: absolute;
-  bottom: 40px;
-  left: 50%;
-  transform: translateX(-50%);
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 8px;
-  z-index: 2;
-  animation: bounce 2s ease-in-out infinite;
-}
-
-@keyframes bounce {
-  0%, 100% { transform: translateX(-50%) translateY(0); }
-  50% { transform: translateX(-50%) translateY(8px); }
-}
-
-.scroll-line {
-  width: 1px;
-  height: 40px;
-  background: linear-gradient(to bottom, rgba(244,121,32,0.6), transparent);
-}
-
-.scroll-label {
-  font-family: var(--mono);
-  font-size: 9px;
-  color: var(--muted);
-  letter-spacing: 0.2em;
-  writing-mode: vertical-rl;
-}
-
-/* ─── STATS ─── */
-#stats {
-  padding: 80px 48px;
-  position: relative;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1px;
-  max-width: 900px;
-  margin: 0 auto;
-  background: var(--border);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  overflow: hidden;
-}
-
-.stat-item {
-  background: var(--surface);
-  padding: 48px 40px;
-  text-align: center;
-  position: relative;
-}
-
-.stat-item::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, transparent, var(--orange), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.stat-item:hover::before { opacity: 1; }
-
-.stat-number {
-  font-family: var(--display);
-  font-size: 56px;
-  font-weight: 800;
-  color: #fff;
-  line-height: 1;
-  margin-bottom: 8px;
-  letter-spacing: -0.03em;
-}
-
-.stat-number span { color: var(--orange); }
-
-.stat-label {
-  font-family: var(--body);
-  font-size: 15px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.6;
-  max-width: 200px;
-  margin: 0 auto;
-}
-
-.stats-source {
-  text-align: center;
-  margin-top: 32px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0.05em;
-}
-
-/* ─── PARA QUIÉN ─── */
-#para-quien {
-  padding: 120px 48px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.section-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  font-weight: 500;
-  color: var(--orange);
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  margin-bottom: 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.section-label::before {
-  content: '';
-  width: 24px;
-  height: 1px;
-  background: var(--orange);
-}
-
-.section-title {
-  font-family: var(--display);
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-}
-
-.section-sub {
-  font-family: var(--body);
-  font-size: 18px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.7;
-  max-width: 540px;
-  margin-bottom: 56px;
-}
-
-.nichos-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
-}
-
-.nicho-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 16px;
-  padding: 32px 28px;
-  transition: border-color 0.3s, transform 0.3s, background 0.3s;
-  cursor: default;
-  position: relative;
-  overflow: hidden;
-}
-
-.nicho-card::after {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, rgba(59,69,224,0.05), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-
-.nicho-card:hover {
-  border-color: rgba(59,69,224,0.35);
-  transform: translateY(-4px);
-  background: rgba(59,69,224,0.05);
-}
-
-.nicho-card:hover::after { opacity: 1; }
-
-.nicho-icon {
-  font-size: 32px;
-  margin-bottom: 16px;
-  display: block;
-}
-
-.nicho-name {
-  font-family: var(--display);
-  font-size: 18px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 8px;
-}
-
-.nicho-desc {
-  font-family: var(--body);
-  font-size: 15px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.65;
-}
-
-
-/* ─── CÓMO FUNCIONA ─── */
-#como-funciona {
-  padding: 120px 48px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-}
-
-.como-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.pasos-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2px;
-  margin-top: 56px;
-  background: var(--border);
-  border-radius: 20px;
-  overflow: hidden;
-  border: 1px solid var(--border);
-}
-
-.paso {
-  background: var(--surface2);
-  padding: 48px 36px;
-  position: relative;
-}
-
-.paso-num {
-  font-family: var(--mono);
-  font-size: 72px;
-  font-weight: 700;
-  color: rgba(244,121,32,0.25);
-  line-height: 1;
-  margin-bottom: 24px;
-  letter-spacing: -0.05em;
-}
-
-.paso-icon {
-  width: 48px; height: 48px;
-  background: rgba(244,121,32,0.1);
-  border: 1px solid rgba(244,121,32,0.2);
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 22px;
-  margin-bottom: 20px;
-}
-
-.paso-title {
-  font-family: var(--display);
-  font-size: 22px;
-  font-weight: 700;
-  color: #fff;
-  margin-bottom: 12px;
-  letter-spacing: -0.01em;
-}
-
-.paso-desc {
-  font-family: var(--body);
-  font-size: 15px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.7;
-}
-
-.paso-connector {
-  position: absolute;
-  right: -20px;
-  top: 50%;
-  transform: translateY(-50%);
-  width: 40px;
-  height: 40px;
-  background: var(--orange);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2;
-  font-size: 16px;
-}
-
-.cta-section {
-  text-align: center;
-  margin-top: 64px;
-}
-
-.cta-primary {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--orange);
-  color: #fff;
-  font-family: var(--display);
-  font-size: 15px;
-  font-weight: 700;
-  padding: 16px 36px;
-  border-radius: 12px;
-  text-decoration: none;
-  letter-spacing: 0.04em;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.cta-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 16px 40px rgba(244,121,32,0.35);
-}
-
-.cta-sub {
-  display: block;
-  margin-top: 12px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-/* ─── DEMO ─── */
-#demo {
-  padding: 120px 48px;
-  max-width: 1100px;
-  margin: 0 auto;
-}
-
-.demo-inner {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 64px;
-  align-items: center;
-}
-
-.demo-chat {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  overflow: hidden;
-}
-
-.chat-header {
-  background: rgba(59,69,224,0.08);
-  border-bottom: 1px solid var(--border);
-  padding: 16px 20px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-}
-
-.chat-avatar {
-  width: 36px; height: 36px;
-  background: linear-gradient(135deg, var(--blue), var(--orange));
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-  font-family: var(--display);
-  flex-shrink: 0;
-}
-
-.chat-name {
-  font-family: var(--display);
-  font-size: 14px;
-  font-weight: 700;
-  color: #fff;
-}
-
-.chat-status {
-  font-size: 11px;
-  color: #25D366;
-  font-family: var(--mono);
-}
-
-.chat-status::before {
-  content: '●';
-  margin-right: 4px;
-  animation: pulse-badge 1.5s ease-in-out infinite;
-}
-
-.chat-body {
-  padding: 24px 20px;
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-}
-
-.msg {
-  max-width: 85%;
-  padding: 10px 14px;
-  border-radius: 12px;
-  font-size: 13px;
-  line-height: 1.5;
-  animation: msg-in 0.4s cubic-bezier(0.16,1,0.3,1) both;
-}
-
-@keyframes msg-in {
-  from { opacity: 0; transform: translateY(8px) scale(0.97); }
-  to { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-.msg-user {
-  background: rgba(59,69,224,0.12);
-  border: 1px solid rgba(59,69,224,0.2);
-  color: rgba(255,255,255,0.85);
-  align-self: flex-end;
-  border-bottom-right-radius: 4px;
-}
-
-.msg-sofia {
-  background: rgba(244,121,32,0.08);
-  border: 1px solid rgba(244,121,32,0.15);
-  color: rgba(255,255,255,0.85);
-  align-self: flex-start;
-  border-bottom-left-radius: 4px;
-}
-
-.msg-time {
-  font-size: 10px;
-  color: var(--muted);
-  font-family: var(--mono);
-  margin-top: 4px;
-  text-align: right;
-}
-
-.typing {
-  display: flex;
-  gap: 4px;
-  padding: 10px 14px;
-  background: rgba(244,121,32,0.08);
-  border: 1px solid rgba(244,121,32,0.15);
-  border-radius: 12px;
-  border-bottom-left-radius: 4px;
-  width: fit-content;
-  align-self: flex-start;
-}
-
-.typing span {
-  width: 6px; height: 6px;
-  background: var(--orange);
-  border-radius: 50%;
-  animation: typing 1.2s ease-in-out infinite;
-}
-
-.typing span:nth-child(2) { animation-delay: 0.2s; }
-.typing span:nth-child(3) { animation-delay: 0.4s; }
-
-@keyframes typing {
-  0%, 60%, 100% { transform: translateY(0); opacity: 0.4; }
-  30% { transform: translateY(-4px); opacity: 1; }
-}
-
-.response-time {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  padding: 6px 12px;
-  background: rgba(37,211,102,0.08);
-  border: 1px solid rgba(37,211,102,0.15);
-  border-radius: 100px;
-  font-family: var(--mono);
-  font-size: 10px;
-  color: #25D366;
-  align-self: center;
-  margin-top: 4px;
-}
-
-.demo-text .section-sub { margin-bottom: 36px; }
-
-.demo-stat {
-  display: flex;
-  align-items: center;
-  gap: 16px;
-  padding: 16px 20px;
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 12px;
-  margin-bottom: 12px;
-  transition: border-color 0.3s;
-}
-
-.demo-stat:hover { border-color: rgba(59,69,224,0.3); }
-
-.demo-stat-num {
-  font-family: var(--display);
-  font-size: 28px;
-  font-weight: 800;
-  color: var(--orange);
-  min-width: 70px;
-}
-
-.demo-stat-label {
-  font-family: var(--body);
-  font-size: 15px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.55;
-}
-
-/* ─── ESCASEZ ─── */
-#escasez {
-  padding: 80px 48px;
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  border-bottom: 1px solid var(--border);
-  position: relative;
-  overflow: hidden;
-}
-
-#escasez::before {
-  content: '';
-  position: absolute;
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  width: 600px; height: 600px;
-  background: radial-gradient(circle, rgba(244,121,32,0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.escasez-inner {
-  max-width: 700px;
-  margin: 0 auto;
-  text-align: center;
-  position: relative;
-}
-
-.escasez-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  background: rgba(244,121,32,0.1);
-  border: 1px solid rgba(244,121,32,0.25);
-  border-radius: 100px;
-  padding: 8px 20px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--orange);
-  letter-spacing: 0.08em;
-  margin-bottom: 32px;
-}
-
-.escasez-title {
-  font-family: var(--display);
-  font-size: clamp(28px, 4vw, 48px);
-  font-weight: 800;
-  line-height: 1.1;
-  letter-spacing: -0.02em;
-  margin-bottom: 16px;
-}
-
-.escasez-sub {
-  font-size: 16px;
-  color: var(--muted);
-  line-height: 1.7;
-  margin-bottom: 48px;
-}
-
-.precio-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 20px;
-  margin-bottom: 32px;
-}
-
-.precio-old {
-  font-family: var(--display);
-  font-size: 28px;
-  font-weight: 700;
-  color: var(--muted);
-  text-decoration: line-through;
-  text-decoration-color: var(--orange);
-}
-
-.precio-new {
-  font-family: var(--display);
-  font-size: 56px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.03em;
-}
-
-.precio-new span { color: var(--orange); }
-
-.precio-period {
-  font-family: var(--mono);
-  font-size: 13px;
-  color: var(--muted);
-  align-self: flex-end;
-  padding-bottom: 8px;
-}
-
-.lugares-wrap {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 8px;
-  margin-bottom: 40px;
-}
-
-.lugar {
-  width: 40px; height: 8px;
-  border-radius: 4px;
-  background: var(--orange);
-  transition: opacity 0.3s;
-}
-
-.lugar.taken { background: rgba(255,255,255,0.1); }
-
-.lugares-label {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted);
-  margin-left: 8px;
-}
-
-.cta-escasez {
-  display: inline-flex;
-  align-items: center;
-  gap: 10px;
-  background: var(--orange);
-  color: #fff;
-  font-family: var(--display);
-  font-size: 16px;
-  font-weight: 700;
-  padding: 18px 48px;
-  border-radius: 12px;
-  text-decoration: none;
-  letter-spacing: 0.04em;
-  transition: transform 0.2s, box-shadow 0.2s;
-  position: relative;
-  overflow: hidden;
-}
-
-.cta-escasez::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(135deg, transparent 40%, rgba(255,255,255,0.08));
-}
-
-.cta-escasez:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 20px 50px rgba(244,121,32,0.4);
-}
-
-.garantia {
-  margin-top: 16px;
-  font-family: var(--mono);
-  font-size: 11px;
-  color: var(--muted);
-  letter-spacing: 0.05em;
-}
-
-/* ─── PLANES ─── */
-.planes-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 20px;
-  margin: 40px auto 32px;
-  max-width: 820px;
-  text-align: left;
-}
-
-.plan-card {
-  background: var(--surface2);
-  border: 1px solid var(--border);
-  border-radius: 20px;
-  padding: 36px 32px;
-  position: relative;
-  transition: border-color 0.3s, transform 0.3s;
-}
-
-.plan-card:hover { transform: translateY(-4px); }
-
-.plan-featured {
-  border-color: rgba(244,121,32,0.3);
-  background: rgba(244,121,32,0.04);
-}
-
-.plan-featured:hover { border-color: rgba(244,121,32,0.55); }
-
-.plan-popular {
-  position: absolute;
-  top: -12px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: var(--orange);
-  color: #fff;
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  padding: 5px 16px;
-  border-radius: 100px;
-  white-space: nowrap;
-}
-
-.plan-tag {
-  font-family: var(--mono);
-  font-size: 10px;
-  font-weight: 600;
-  color: var(--blue2);
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  border: 1px solid rgba(91,102,255,0.25);
-  border-radius: 100px;
-  padding: 4px 12px;
-  display: inline-block;
-  margin-bottom: 16px;
-}
-
-.plan-name {
-  font-family: var(--display);
-  font-size: 24px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.02em;
-  margin-bottom: 12px;
-}
-
-.plan-desc {
-  font-size: 14px;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.7;
-  margin-bottom: 24px;
-}
-
-.plan-precio {
-  display: flex;
-  align-items: baseline;
-  gap: 12px;
-  margin-bottom: 24px;
-}
-
-.plan-old {
-  font-size: 16px;
-  color: rgba(255,255,255,0.3);
-  text-decoration: line-through;
-  text-decoration-color: var(--orange);
-  font-family: var(--display);
-}
-
-.plan-new {
-  font-family: var(--display);
-  font-size: 40px;
-  font-weight: 800;
-  color: #fff;
-  letter-spacing: -0.03em;
-}
-
-.plan-features {
-  list-style: none;
-  margin-bottom: 28px;
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-}
-
-.plan-features li {
-  font-size: 14px;
-  color: rgba(255,255,255,0.88);
-  line-height: 1.5;
-}
-
-.plan-cta {
-  display: block;
-  text-align: center;
-  padding: 14px 24px;
-  border-radius: 10px;
-  font-family: var(--display);
-  font-size: 14px;
-  font-weight: 700;
-  text-decoration: none;
-  letter-spacing: 0.03em;
-  transition: transform 0.2s, box-shadow 0.2s;
-}
-
-.plan-cta:hover { transform: translateY(-2px); }
-
-.plan-cta-primary {
-  background: var(--orange);
-  color: #fff;
-}
-
-.plan-cta-primary:hover { box-shadow: 0 12px 32px rgba(244,121,32,0.35); }
-
-.plan-cta-secondary {
-  background: transparent;
-  color: #fff;
-  border: 1px solid rgba(255,255,255,0.15);
-}
-
-.plan-cta-secondary:hover {
-  border-color: rgba(255,255,255,0.35);
-  background: rgba(255,255,255,0.05);
-}
-
-.plan-duda {
-  max-width: 600px;
-  margin: 0 auto 24px;
-  background: rgba(59,69,224,0.06);
-  border: 1px solid rgba(59,69,224,0.15);
-  border-radius: 14px;
-  padding: 24px 28px;
-  text-align: center;
-}
-
-.plan-duda p {
-  font-size: 15px;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.7;
-  margin-bottom: 16px;
-}
-
-.plan-duda-cta {
-  display: inline-block;
-  font-family: var(--display);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--blue2);
-  text-decoration: none;
-  letter-spacing: 0.03em;
-  transition: color 0.2s;
-}
-
-.plan-duda-cta:hover { color: #fff; }
-
-@media (max-width: 768px) {
-  .planes-grid { grid-template-columns: 1fr; }
-}
-
-/* ─── FAQ ─── */
-#faq {
-  padding: 120px 48px;
-  max-width: 800px;
-  margin: 0 auto;
-}
-
-.faq-list {
-  margin-top: 56px;
-}
-
-.faq-item {
-  border-bottom: 1px solid var(--border);
-  overflow: hidden;
-}
-
-.faq-q {
-  width: 100%;
-  background: none;
-  border: none;
-  color: #fff;
-  text-align: left;
-  padding: 24px 0;
-  font-family: var(--display);
-  font-size: 18px;
-  font-weight: 600;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  letter-spacing: -0.01em;
-  transition: color 0.2s;
-}
-
-.faq-q:hover { color: var(--orange); }
-
-.faq-icon {
-  width: 28px; height: 28px;
-  border: 1px solid var(--border);
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 16px;
-  flex-shrink: 0;
-  transition: transform 0.3s, border-color 0.3s, background 0.3s;
-  color: var(--muted);
-}
-
-.faq-item.open .faq-icon {
-  transform: rotate(45deg);
-  border-color: var(--orange);
-  background: rgba(244,121,32,0.1);
-  color: var(--orange);
-}
-
-.faq-a {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height 0.4s cubic-bezier(0.16,1,0.3,1), padding 0.3s;
-}
-
-.faq-item.open .faq-a { max-height: 200px; padding-bottom: 24px; }
-
-.faq-a p {
-  font-family: var(--body);
-  font-size: 16px;
-  font-weight: 400;
-  color: rgba(255,255,255,0.82);
-  line-height: 1.8;
-}
-
-.faq-cta {
-  text-align: center;
-  margin-top: 64px;
-}
-
-.faq-cta-label {
-  font-size: 14px;
-  color: var(--muted);
-  margin-bottom: 16px;
-}
-
-/* ─── FOOTER ─── */
-footer {
-  background: var(--surface);
-  border-top: 1px solid var(--border);
-  padding: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.footer-brand {
-  font-family: var(--display);
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--muted);
-  letter-spacing: 0.04em;
-}
-
-.footer-brand span { color: var(--orange); }
-
-.footer-copy {
-  font-family: var(--mono);
-  font-size: 11px;
-  color: rgba(255,255,255,0.2);
-  letter-spacing: 0.05em;
-}
-
-/* ─── RESPONSIVE ─── */
-@media (max-width: 768px) {
-  nav { padding: 16px 24px; }
-  .nav-links { display: none; }
-  #hero { padding: 100px 24px 60px; }
-  .stats-grid { grid-template-columns: 1fr; }
-  .nichos-grid { grid-template-columns: 1fr 1fr; }
-  .pasos-grid { grid-template-columns: 1fr; }
-  .demo-inner { grid-template-columns: 1fr; }
-  #para-quien, #demo, #faq { padding: 80px 24px; }
-  #como-funciona, #escasez { padding: 80px 24px; }
-  footer { flex-direction: column; gap: 16px; text-align: center; }
-  .precio-wrap { flex-wrap: wrap; }
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:#07070f;color:#fff;overflow-x:hidden;}
+
+/* URGENCY BAR */
+.urgency{background:linear-gradient(90deg,#7c3aed,#f97316);padding:9px 20px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.3px;}
+.urgency em{background:rgba(0,0,0,.3);padding:2px 10px;border-radius:20px;font-style:normal;margin:0 4px;}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;border-bottom:1px solid rgba(255,255,255,.06);}
+.logo{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.logo svg{width:44px;height:44px;}
+.logo-words{display:flex;flex-direction:column;}
+.logo-pulse{font-size:15px;font-weight:900;letter-spacing:2px;color:#fff;line-height:1;}
+.logo-overture{font-size:9px;font-weight:700;letter-spacing:4px;color:#f97316;margin-top:2px;}
+.nav-right{display:flex;gap:10px;}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.btn-ghost:hover{border-color:rgba(255,255,255,.5);color:#fff;}
+.btn-orange{background:linear-gradient(135deg,#f97316,#ea580c);border:none;color:#fff;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:transform .15s;}
+.btn-orange:hover{transform:scale(1.03);}
+
+/* HERO */
+.hero{text-align:center;padding:72px 40px 52px;max-width:860px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:#f97316;font-size:11px;font-weight:700;letter-spacing:3px;padding:7px 20px;border-radius:30px;margin-bottom:32px;text-transform:uppercase;}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse-dot 1.5s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
+.hero h1{font-size:clamp(40px,6.5vw,76px);font-weight:900;line-height:1.0;letter-spacing:-2.5px;margin-bottom:22px;}
+.hero h1 .orange{color:#f97316;}
+.hero h1 .dim{color:rgba(255,255,255,.85);}
+.hero-sub{font-size:clamp(16px,2.2vw,20px);color:rgba(255,255,255,.45);max-width:580px;margin:0 auto 48px;line-height:1.65;}
+.hero-sub strong{color:rgba(255,255,255,.75);}
+
+/* SELECTOR */
+.selector{padding:0 40px 52px;max-width:860px;margin:0 auto;}
+.sel-label{font-size:11px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:20px;text-transform:uppercase;}
+.nicho-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.nc{background:#0c0c18;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:22px 14px 18px;cursor:pointer;text-align:center;transition:all .2s;position:relative;overflow:hidden;}
+.nc::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(249,115,22,.07),rgba(124,58,237,.07));opacity:0;transition:opacity .2s;}
+.nc:hover{border-color:rgba(249,115,22,.35);transform:translateY(-2px);}
+.nc:hover::after{opacity:1;}
+.nc.active{border-color:#f97316;background:#0f0c1a;}
+.nc.active::after{opacity:1;}
+.nc-icon{font-size:28px;margin-bottom:10px;display:block;}
+.nc-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;position:relative;z-index:1;}
+.nc-desc{font-size:11px;color:rgba(255,255,255,.35);line-height:1.4;position:relative;z-index:1;}
+
+.pain-bar{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.18);border-radius:10px;padding:14px 20px;font-size:13px;color:rgba(255,255,255,.55);text-align:center;margin-bottom:22px;display:none;line-height:1.6;}
+.pain-bar strong{color:#f97316;}
+
+.cta-demo{display:block;width:100%;max-width:440px;margin:0 auto;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:12px;padding:19px 28px;font-size:17px;font-weight:800;color:#fff;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:-.3px;opacity:.3;transition:all .25s;pointer-events:none;}
+.cta-demo.on{opacity:1;pointer-events:auto;}
+.cta-demo.on:hover{transform:scale(1.02);box-shadow:0 8px 32px rgba(249,115,22,.3);}
+
+.trust-row{display:flex;justify-content:center;gap:24px;margin-top:18px;flex-wrap:wrap;}
+.trust-item{font-size:12px;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:7px;}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:#f97316;flex-shrink:0;}
+
+/* CHAT */
+.chat-wrap{padding:0 40px 64px;max-width:680px;margin:0 auto;display:none;}
+.chat-card{background:#0c0c18;border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;}
+.chat-hd{padding:18px 22px;border-bottom:1px solid rgba(249,115,22,.12);display:flex;align-items:center;gap:14px;}
+.sofia-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f97316);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;color:#fff;flex-shrink:0;border:2px solid rgba(249,115,22,.3);}
+.sofia-name{font-size:15px;font-weight:700;color:#fff;}
+.sofia-status{font-size:12px;color:#4ade80;margin-top:2px;display:flex;align-items:center;gap:5px;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse-dot 1.5s infinite;}
+.nicho-pill{margin-left:auto;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.22);color:#f97316;font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;letter-spacing:.5px;}
+
+.msgs{height:380px;overflow-y:auto;padding:20px 18px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin;scrollbar-color:rgba(249,115,22,.12) transparent;}
+.msg{display:flex;gap:10px;max-width:90%;animation:slideUp .3s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.msg.sofia{align-self:flex-start;}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.av-s{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f97316);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.bubble{padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.6;}
+.msg.sofia .bubble{background:#14142a;border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.88);border-top-left-radius:4px;}
+.msg.user .bubble{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border-top-right-radius:4px;}
+.typing-row{display:flex;align-items:center;gap:5px;padding:12px 16px;background:#14142a;border:1px solid rgba(255,255,255,.07);border-radius:18px;border-top-left-radius:4px;width:fit-content;}
+.dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:bop 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}.dot:nth-child(3){animation-delay:.4s;}
+@keyframes bop{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
+
+.limit-notice{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 16px;text-align:center;font-size:12px;color:rgba(255,255,255,.3);margin:0 18px;}
+
+.chat-ft{padding:14px 18px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:10px;align-items:flex-end;}
+.chat-in{flex:1;background:#111128;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 15px;font-size:14px;color:#fff;font-family:'Inter',sans-serif;resize:none;outline:none;transition:border-color .2s;line-height:1.45;}
+.chat-in:focus{border-color:rgba(249,115,22,.4);}
+.chat-in::placeholder{color:rgba(255,255,255,.18);}
+.chat-in:disabled{opacity:.4;cursor:not-allowed;}
+.send-btn{background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:10px;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s;font-size:18px;color:#fff;}
+.send-btn:hover{transform:scale(1.08);}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+.wa-cta{margin:14px 18px;background:linear-gradient(135deg,rgba(37,211,102,.1),rgba(37,211,102,.05));border:1px solid rgba(37,211,102,.2);border-radius:12px;padding:18px;text-align:center;display:none;}
+.wa-cta p{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:12px;line-height:1.55;}
+.wa-cta strong{color:#fff;}
+.wa-link{display:inline-flex;align-items:center;gap:9px;background:#25d366;color:#fff;text-decoration:none;padding:12px 26px;border-radius:10px;font-size:14px;font-weight:800;font-family:'Inter',sans-serif;transition:transform .15s;}
+.wa-link:hover{transform:scale(1.03);}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(249,115,22,.15),transparent);margin:0 40px;}
+
+/* STATS */
+.stats-sec{padding:72px 40px;max-width:900px;margin:0 auto;}
+.sec-tag{font-size:11px;font-weight:700;letter-spacing:3px;color:#f97316;margin-bottom:14px;text-transform:uppercase;}
+.sec-h2{font-size:clamp(28px,4vw,46px);font-weight:900;letter-spacing:-1.5px;line-height:1.08;margin-bottom:48px;}
+.sec-h2 .orange{color:#f97316;}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.stat-card{background:#0c0c18;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px 24px;}
+.stat-num{font-size:48px;font-weight:900;color:#f97316;line-height:1;margin-bottom:8px;letter-spacing:-2px;}
+.stat-text{font-size:14px;color:rgba(255,255,255,.5);line-height:1.6;}
+.stat-text strong{color:rgba(255,255,255,.85);}
+
+/* STEPS */
+.steps-sec{padding:0 40px 72px;max-width:900px;margin:0 auto;}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.step{background:#0c0c18;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px 20px;position:relative;}
+.step-n{font-size:48px;font-weight:900;color:rgba(249,115,22,.12);line-height:1;margin-bottom:14px;}
+.step-title{font-size:15px;font-weight:700;margin-bottom:8px;}
+.step-desc{font-size:13px;color:rgba(255,255,255,.42);line-height:1.6;}
+.step-arrow{display:none;}
+
+/* OBJECIONES */
+.obj-sec{padding:0 40px 72px;max-width:900px;margin:0 auto;}
+.obj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.obj{border-radius:14px;padding:22px 20px;border:1px solid;}
+.obj.myth{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.12);}
+.obj.truth{background:rgba(249,115,22,.05);border-color:rgba(249,115,22,.18);}
+.obj-lbl{font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;}
+.obj.myth .obj-lbl{color:rgba(239,68,68,.7);}
+.obj.truth .obj-lbl{color:#f97316;}
+.obj-text{font-size:13px;color:rgba(255,255,255,.58);line-height:1.65;}
+.obj-text strong{color:rgba(255,255,255,.88);}
+
+/* CTA FINAL */
+.cta-sec{padding:0 40px 96px;max-width:700px;margin:0 auto;text-align:center;}
+.cta-box{background:#0c0c18;border:1px solid rgba(249,115,22,.2);border-radius:22px;padding:56px 48px;}
+.spots-badge{display:inline-block;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 16px;border-radius:20px;margin-bottom:26px;text-transform:uppercase;}
+.cta-box h2{font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;}
+.cta-box p{font-size:15px;color:rgba(255,255,255,.45);margin-bottom:36px;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto;}
+.cta-box p strong{color:rgba(255,255,255,.8);}
+.cta-main{display:block;width:100%;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:12px;padding:19px 28px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:12px;transition:all .2s;}
+.cta-main:hover{transform:scale(1.02);box-shadow:0 8px 40px rgba(249,115,22,.35);}
+.cta-sec-btn{display:block;width:100%;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:15px 28px;font-size:14px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.cta-sec-btn:hover{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.8);}
+.guarantee{margin-top:22px;font-size:12px;color:rgba(255,255,255,.22);line-height:1.8;}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.05);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;}
+.ft-left{display:flex;align-items:center;gap:10px;}
+.ft-left svg{width:28px;height:28px;opacity:.7;}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.2);}
+.ft-right{font-size:12px;color:rgba(255,255,255,.2);}
+
+/* FLOAT WA */
+.float-wa{position:fixed;bottom:24px;right:24px;z-index:999;background:#25d366;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);cursor:pointer;text-decoration:none;opacity:0;transition:opacity .4s,transform .2s;}
+.float-wa:hover{transform:scale(1.08);}
+.float-wa svg{width:28px;height:28px;fill:#fff;}
+
+@media(max-width:640px){
+  nav{padding:14px 18px;}
+  .hero{padding:48px 18px 36px;}
+  .selector{padding:0 18px 40px;}
+  .nicho-grid{grid-template-columns:1fr 1fr;}
+  .chat-wrap{padding:0 18px 48px;}
+  .stats-sec,.steps-sec,.obj-sec{padding-left:18px;padding-right:18px;}
+  .stats-grid{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr;}
+  .obj-grid{grid-template-columns:1fr;}
+  .cta-sec{padding:0 18px 64px;}
+  .cta-box{padding:36px 22px;}
+  footer{padding:20px 18px;flex-direction:column;gap:10px;text-align:center;}
 }
 </style>
 </head>
 <body>
 
-<div class="cursor" id="cursor"></div>
-<div class="cursor-ring" id="cursor-ring"></div>
+<div class="urgency">🔴 Solo aceptamos <em>3 nuevos clientes</em> este mes para garantizar calidad — quedan lugares</div>
 
-<!-- NAV -->
-<nav id="navbar">
-  <a href="#" class="nav-logo">
+<nav>
+  <div class="logo" onclick="window.open('https://pulseoverture.com','_blank')">
+    <!-- LOGO REAL PULSE OVERTURE como SVG -->
     <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
-      <rect x="6" y="28" width="7" height="12" rx="2" fill="#3B45E0" opacity="0.55"/>
-      <rect x="15" y="20" width="7" height="20" rx="2" fill="#4B56FF" opacity="0.75"/>
-      <rect x="24" y="13" width="7" height="27" rx="2" fill="#5B66FF"/>
-      <rect x="33" y="4" width="7" height="36" rx="2" fill="url(#ng)"/>
+      <circle cx="22" cy="22" r="21" stroke="url(#ring)" stroke-width="1.5"/>
+      <!-- barras estilo barras de señal/stats -->
+      <rect x="8" y="26" width="5" height="10" rx="1" fill="#3b5bdb" opacity=".7"/>
+      <rect x="15" y="20" width="5" height="16" rx="1" fill="#4c6ef5" opacity=".85"/>
+      <rect x="22" y="13" width="5" height="23" rx="1" fill="url(#bar-gold)"/>
       <defs>
-        <linearGradient id="ng" x1="36.5" y1="4" x2="36.5" y2="40" gradientUnits="userSpaceOnUse">
-          <stop offset="0%" stop-color="#FFB060"/>
-          <stop offset="100%" stop-color="#F47920"/>
+        <linearGradient id="ring" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#3b5bdb"/>
+          <stop offset="100%" stop-color="#f97316"/>
+        </linearGradient>
+        <linearGradient id="bar-gold" x1="22" y1="13" x2="27" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fbbf24"/>
+          <stop offset="100%" stop-color="#f97316"/>
         </linearGradient>
       </defs>
     </svg>
-    <div class="nav-brand">
-      <span class="brand-main">PULSE</span>
-      <span class="brand-sub">OVERTURE</span>
+    <div class="logo-words">
+      <span class="logo-pulse">PULSE</span>
+      <span class="logo-overture">OVERTURE</span>
     </div>
-  </a>
-  <ul class="nav-links">
-    <li><a href="#como-funciona">Cómo funciona</a></li>
-    <li><a href="#para-quien">Para quién</a></li>
-    <li><a href="#faq">FAQ</a></li>
-    <li><a href="https://wa.me/5217751184278" target="_blank" class="nav-cta">Escribir ahora →</a></li>
-  </ul>
+  </div>
+  <div class="nav-right">
+    <button class="btn-ghost" onclick="window.open('https://wa.me/7751184278','_blank')">📱 WhatsApp</button>
+    <button class="btn-orange" onclick="window.open('https://wa.me/7751184278','_blank')">Quiero mi agente</button>
+  </div>
 </nav>
 
 <!-- HERO -->
-<section id="hero">
-  <canvas id="hero-canvas"></canvas>
-  <div class="hero-content">
-    <div class="hero-badge reveal">
-      <span class="badge-dot"></span>
-      AUTOMATIZACIÓN CON IA · DISPONIBLE AHORA
-    </div>
-    <h1 class="hero-h1 reveal delay-1">
-      ¿Cuántos leads perdiste hoy<br>
-      por no contestar<br>
-      <span class="line-orange">a tiempo?</span>
-    </h1>
-    <p class="hero-sub reveal delay-2">
-      Tus ventas se cerraron solas. Tú ni te enteraste.<br>
-      Respondió en 3 segundos. Tu competencia tardó 4 horas.
-    </p>
-    <p class="hero-proof reveal delay-3">
-      // El 78% de los leads compra al primero que responde
-    </p>
-    <a href="https://wa.me/5217751184278" target="_blank" class="hero-cta reveal delay-4">
-      Ver cómo funciona
-      <span class="hero-cta-arrow">→</span>
-    </a>
-  </div>
-  <div class="hero-scroll">
-    <div class="scroll-line"></div>
-    <span class="scroll-label">SCROLL</span>
-  </div>
+<section class="hero">
+  <div class="hero-badge"><span class="badge-dot"></span>Demo en vivo · IA Real · Sin registro</div>
+  <h1>
+    <span class="dim">Mientras tú duermes,</span><br>
+    <span class="orange">tu negocio cierra ventas.</span>
+  </h1>
+  <p class="hero-sub">No es un chatbot de botones. Es <strong>Sofía</strong> — tu mejor vendedora, activa 24/7, sin sueldo, sin descansos. Elige tu negocio y habla con ella ahora mismo.</p>
 </section>
+
+<!-- NICHO SELECTOR -->
+<div class="selector" id="selectorSec">
+  <div class="sel-label">¿Cuál es tu negocio?</div>
+  <div class="nicho-grid">
+    <div class="nc" onclick="pick(this,'coach')"><span class="nc-icon">🎯</span><div class="nc-name">Coach / Mentor</div><div class="nc-desc">Cierra clientes mientras entrenas</div></div>
+    <div class="nc" onclick="pick(this,'info')"><span class="nc-icon">🚀</span><div class="nc-name">Infoproductor</div><div class="nc-desc">Vende cursos en automático</div></div>
+    <div class="nc" onclick="pick(this,'clinica')"><span class="nc-icon">🏥</span><div class="nc-name">Clínica / Salud</div><div class="nc-desc">Agenda sin recepcionista</div></div>
+    <div class="nc" onclick="pick(this,'empresa')"><span class="nc-icon">🏢</span><div class="nc-name">Empresa / Servicios</div><div class="nc-desc">Escala sin contratar</div></div>
+    <div class="nc" onclick="pick(this,'restaurante')"><span class="nc-icon">🍽️</span><div class="nc-name">Restaurante</div><div class="nc-desc">Mesas siempre llenas</div></div>
+    <div class="nc" onclick="pick(this,'inmobiliaria')"><span class="nc-icon">🏠</span><div class="nc-name">Inmobiliaria</div><div class="nc-desc">Cada prospecto atendido</div></div>
+  </div>
+  <div class="pain-bar" id="painBar"></div>
+  <button class="cta-demo" id="ctaDemo" onclick="goChat()">🔥 Hablar con Sofía ahora — gratis →</button>
+  <div class="trust-row">
+    <div class="trust-item"><div class="trust-dot"></div>Sin registro</div>
+    <div class="trust-item"><div class="trust-dot"></div>Responde en segundos</div>
+    <div class="trust-item"><div class="trust-dot"></div>IA real, no guión</div>
+    <div class="trust-item"><div class="trust-dot"></div>Adaptada a tu nicho</div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="chat-wrap" id="chatWrap">
+  <div class="chat-card">
+    <div class="chat-hd">
+      <div class="sofia-av">S</div>
+      <div>
+        <div class="sofia-name">Sofía · Pulse Overture</div>
+        <div class="sofia-status"><span class="status-dot"></span>En línea ahora</div>
+      </div>
+      <div class="nicho-pill" id="nichoTag"></div>
+    </div>
+    <div class="msgs" id="msgs"></div>
+    <div class="limit-notice" id="limitNotice" style="display:none;padding:10px 16px;"></div>
+    <div class="chat-ft">
+      <textarea class="chat-in" id="chatIn" rows="1" placeholder="Escríbele a Sofía..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
+    </div>
+    <div class="wa-cta" id="waCta">
+      <p>Sofía ya está trabajando por cientos de negocios como el tuyo.<br><strong>¿Quieres verla operar en tu WhatsApp real?</strong></p>
+      <a class="wa-link" href="https://wa.me/7751184278" target="_blank">📲 Hablar con el equipo ahora</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
 
 <!-- STATS -->
-<section id="stats">
+<section class="stats-sec">
+  <div class="sec-tag">El problema real</div>
+  <h2 class="sec-h2">Cada hora sin responder<br><span class="orange">es dinero que se fue.</span></h2>
   <div class="stats-grid">
-    <div class="stat-item reveal">
-      <div class="stat-number"><span class="count" data-target="83">0</span><span>%</span></div>
-      <div class="stat-label">Tasa de conversión promedio cuando se responde en menos de 5 minutos</div>
-    </div>
-    <div class="stat-item reveal delay-2">
-      <div class="stat-number"><span class="count" data-target="98">0</span><span>%</span></div>
-      <div class="stat-label">Tasa de apertura de mensajes en WhatsApp vs 22% en email</div>
-    </div>
-    <div class="stat-item reveal delay-4">
-      <div class="stat-number"><span>3</span><span style="font-size:28px;color:var(--muted)">seg</span></div>
-      <div class="stat-label">Tiempo promedio de respuesta de Sofía. Tu competencia tarda horas.</div>
-    </div>
-  </div>
-  <p class="stats-source reveal">Fuentes: HubSpot, Twilio, Salesforce Research 2024</p>
-</section>
-
-<!-- PARA QUIÉN -->
-<section id="para-quien">
-  <div class="section-label reveal">Para quién es</div>
-  <h2 class="section-title reveal delay-1">Si tienes clientes que llegan<br>por WhatsApp, <span style="color:var(--orange)">Sofía funciona.</span></h2>
-  <p class="section-sub reveal delay-2">Así de simple. Cualquier negocio que pierda leads por no responder rápido es un candidato perfecto.</p>
-  <div class="nichos-grid">
-    <div class="nicho-card reveal delay-1">
-      <span class="nicho-icon">🎯</span>
-      <div class="nicho-name">Coaches & Mentores</div>
-      <div class="nicho-desc">Cada lead que llega a tu mentoría recibe respuesta en segundos, calificado y con fecha agendada.</div>
-    </div>
-    <div class="nicho-card reveal delay-2">
-      <span class="nicho-icon">🚀</span>
-      <div class="nicho-name">Infoproductores</div>
-      <div class="nicho-desc">Tu curso vendiendo solo mientras tú creas contenido. Las ventas no esperan tu disponibilidad.</div>
-    </div>
-    <div class="nicho-card reveal delay-3">
-      <span class="nicho-icon">🏠</span>
-      <div class="nicho-name">Inmobiliarias</div>
-      <div class="nicho-desc">Ningún lead sin respuesta, ninguna cita perdida por falta de seguimiento a tiempo.</div>
-    </div>
-    <div class="nicho-card reveal delay-1">
-      <span class="nicho-icon">🏥</span>
-      <div class="nicho-name">Clínicas & Salud</div>
-      <div class="nicho-desc">Citas agendadas automáticamente, recordatorios enviados, pacientes atendidos antes de llegar.</div>
-    </div>
-    <div class="nicho-card reveal delay-2">
-      <span class="nicho-icon">💪</span>
-      <div class="nicho-name">Gimnasios & Wellness</div>
-      <div class="nicho-desc">Membresías cerradas a las 11pm cuando nadie más contesta. Cada hora cuenta.</div>
-    </div>
-    <div class="nicho-card reveal delay-3">
-      <span class="nicho-icon">🍽️</span>
-      <div class="nicho-name">Restaurantes</div>
-      <div class="nicho-desc">Reservaciones, pedidos y dudas atendidos al instante. Sin perder una sola mesa.</div>
-    </div>
+    <div class="stat-card"><div class="stat-num">78%</div><div class="stat-text"><strong>de los prospectos compran al primero que responde.</strong> No al mejor. Al más rápido.</div></div>
+    <div class="stat-card"><div class="stat-num">9 min</div><div class="stat-text">Es el tiempo máximo que espera un prospecto antes de <strong>irse con tu competencia. Para siempre.</strong></div></div>
+    <div class="stat-card"><div class="stat-num">$0</div><div class="stat-text">Genera tu negocio cuando estás <strong>durmiendo, en reunión o de vacaciones.</strong> Sin IA.</div></div>
+    <div class="stat-card"><div class="stat-num">24/7</div><div class="stat-text">Es cuando tus clientes tienen dudas. <strong>No solo en tu horario de oficina.</strong></div></div>
   </div>
 </section>
 
 <!-- CÓMO FUNCIONA -->
-<section id="como-funciona">
-  <div class="como-inner">
-    <div class="section-label reveal">Cómo funciona</div>
-    <h2 class="section-title reveal delay-1">3 pasos.<br><span style="color:var(--orange)">Cero intervención tuya.</span></h2>
-    <p class="section-sub reveal delay-2">Mientras tú duermes, viajas o te enfocas en lo que importa, Sofía trabaja.</p>
-    <div class="pasos-grid">
-      <div class="paso reveal-left delay-1">
-        <div class="paso-num">01</div>
-        <div class="paso-icon">📩</div>
-        <div class="paso-title">Llega el lead</div>
-        <div class="paso-desc">Un prospecto te escribe por WhatsApp. Da igual si son las 3am o domingo. Sofía está ahí.</div>
-      </div>
-      <div class="paso reveal delay-2">
-        <div class="paso-num">02</div>
-        <div class="paso-icon">🤖</div>
-        <div class="paso-title">Sofía responde</div>
-        <div class="paso-desc">En 3 segundos. Califica, responde objeciones, genera confianza y guía hacia el cierre. Sola.</div>
-      </div>
-      <div class="paso reveal-right delay-3">
-        <div class="paso-num">03</div>
-        <div class="paso-icon">💸</div>
-        <div class="paso-title">Tú cobras</div>
-        <div class="paso-desc">El cliente llegó listo. Sofía hizo el trabajo. Tú recibes el pago. Así de simple.</div>
-      </div>
-    </div>
-    <div class="cta-section reveal delay-4">
-      <a href="https://wa.me/5217751184278" target="_blank" class="cta-primary">
-        Escribir ahora →
-      </a>
-      <span class="cta-sub">// Sin formularios. Sin esperas. Respuesta inmediata.</span>
-    </div>
+<section class="steps-sec">
+  <div class="sec-tag">Cómo funciona</div>
+  <h2 class="sec-h2">3 pasos. Tu negocio<br><span class="orange">en piloto automático.</span></h2>
+  <div class="steps-grid">
+    <div class="step"><div class="step-n">01</div><div class="step-title">Configuramos a Sofía</div><div class="step-desc">En 48 horas Sofía aprende tu negocio, tus productos, tu forma de hablar y tus objeciones más frecuentes.</div></div>
+    <div class="step"><div class="step-n">02</div><div class="step-title">Sofía atiende a tus leads</div><div class="step-desc">Responde, califica y guía al prospecto hacia el cierre — sola, a cualquier hora, sin que tú muevas un dedo.</div></div>
+    <div class="step"><div class="step-n">03</div><div class="step-title">Tú recibes clientes listos</div><div class="step-desc">Solo apareces cuando el prospecto ya quiere comprar. Sofía hizo todo el trabajo previo.</div></div>
   </div>
 </section>
 
-<!-- DEMO -->
-<section id="demo">
-  <div class="demo-inner">
-    <div class="demo-chat reveal-left">
-      <div class="chat-header">
-        <div class="chat-avatar">S</div>
-        <div>
-          <div class="chat-name">Sofía · Pulse Overture</div>
-          <div class="chat-status">En línea ahora</div>
-        </div>
-      </div>
-      <div class="chat-body" id="chat-body">
-        <div class="msg msg-user" style="animation-delay:0.2s">Hola, ¿qué servicios ofrecen?</div>
-        <div class="msg msg-sofia" style="animation-delay:0.8s">Hola 👋 Implementamos agentes de IA que atienden tu WhatsApp 24/7 — califican prospectos, responden objeciones y cierran ventas mientras tú duermes.</div>
-        <div class="msg msg-sofia" style="animation-delay:1.4s">¿A qué te dedicas tú? Con eso te cuento exactamente cómo funcionaría para tu negocio 🎯</div>
-        <div class="msg msg-user" style="animation-delay:2s">Soy coach de ventas</div>
-        <div class="typing" style="animation-delay:2.5s" id="typing-indicator">
-          <span></span><span></span><span></span>
-        </div>
-        <div class="msg msg-sofia" style="animation-delay:3.2s;display:none" id="last-msg">Perfecto 🔥 Cada lead que llega a tu programa recibe respuesta en segundos y con fecha de llamada agendada. Sin que tú muevas un dedo.</div>
-        <div class="response-time" style="animation-delay:3.6s;display:none" id="resp-time">⚡ Respondido en menos de 1 minuto</div>
-      </div>
-    </div>
-    <div class="demo-text reveal-right">
-      <div class="section-label">Pruébalo tú mismo</div>
-      <h2 class="section-title" style="font-size:clamp(24px,3vw,38px);margin-bottom:16px;">Juzga tú mismo.<br><span style="color:var(--orange)">La prueba eres tú.</span></h2>
-      <p class="section-sub">No te pido que confíes en nosotros. Te pido que lo veas funcionar ahora mismo. Escríbenos y experimenta lo que tus clientes van a sentir.</p>
-      <div class="demo-stat reveal delay-1">
-        <div class="demo-stat-num">78%</div>
-        <div class="demo-stat-label">de los leads compra al primero que responde. ¿Eres tú ese primero?</div>
-      </div>
-      <div class="demo-stat reveal delay-2">
-        <div class="demo-stat-num">24/7</div>
-        <div class="demo-stat-label">Sofía nunca se enferma, nunca pide aumento, nunca tiene mal día.</div>
-      </div>
-      <div class="demo-stat reveal delay-3">
-        <div class="demo-stat-num">3–7</div>
-        <div class="demo-stat-label">días para que tu negocio esté respondiendo y cerrando solo.</div>
-      </div>
-    </div>
+<!-- OBJECIONES -->
+<section class="obj-sec">
+  <div class="sec-tag">Lo que crees vs la realidad</div>
+  <h2 class="sec-h2">Las excusas que le cuestan<br><span class="orange">más caro de lo que crees.</span></h2>
+  <div class="obj-grid">
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"Los chatbots suenan robóticos y espantan a mis clientes."</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text"><strong>Sofía no es un chatbot.</strong> Lee el contexto, adapta su tono y responde como una vendedora humana experta en tu negocio.</div></div>
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"Prefiero atender yo personalmente a mis clientes."</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text">Sofía <strong>filtra y calienta</strong> al prospecto. Tú solo apareces con quien ya quiere comprar.</div></div>
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"No estoy listo todavía para esto."</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text"><strong>Cada día que esperas</strong> es un prospecto que respondió tu competencia. El momento perfecto no existe.</div></div>
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"¿Y si Sofía dice algo mal a un cliente?"</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text"><strong>Tú tienes el control total.</strong> Si detecta algo complejo, te avisa y escala contigo. Nunca opera fuera de tus parámetros.</div></div>
   </div>
 </section>
 
-<!-- ESCASEZ -->
-<section id="escasez">
-  <div class="escasez-inner">
-    <div class="escasez-badge reveal">
-      <span class="badge-dot"></span>
-      IMPLEMENTACIONES DISPONIBLES ESTE MES
-    </div>
-    <h2 class="escasez-title reveal delay-1">Sofía solo puede implementarse<br>en <span style="color:var(--orange)">3 negocios este mes.</span></h2>
-    <p class="escasez-sub reveal delay-2">Cada implementación es 100% personalizada — no es un template. Es Sofía adaptada a tu negocio, tu tono y tus procesos. Por eso los lugares son limitados.</p>
-
-    <!-- Lugares -->
-    <div class="lugares-wrap reveal delay-2">
-      <div class="lugar taken"></div>
-      <div class="lugar taken"></div>
-      <div class="lugar"></div>
-      <span class="lugares-label">Solo 1 lugar disponible este mes</span>
-    </div>
-
-    <!-- Dos planes -->
-    <div class="planes-grid reveal delay-3">
-
-      <!-- Plan Independiente -->
-      <div class="plan-card">
-        <div class="plan-tag">Pago único</div>
-        <div class="plan-name">Sofía Independiente</div>
-        <div class="plan-desc">Una vez y funciona sola para siempre. Sin mensualidades, sin ataduras. Ideal si tu negocio ya tiene procesos definidos y quieres automatizar sin depender de nadie.</div>
-        <div class="plan-precio">
-          <span class="plan-old">$497 USD</span>
-          <span class="plan-new">$297<span style="font-size:18px;color:var(--muted);font-weight:400"> USD</span></span>
-        </div>
-        <ul class="plan-features">
-          <li>✅ Implementación completa en 3–7 días</li>
-          <li>✅ Sofía configurada con tu tono y procesos</li>
-          <li>✅ Integración con WhatsApp Business</li>
-          <li>✅ Capacitación incluida al entregar</li>
-          <li>✅ Sin mensualidades ni contratos</li>
-          <li>❌ Sin soporte mensual continuo</li>
-        </ul>
-        <a href="https://wa.me/5217751184278" target="_blank" class="plan-cta plan-cta-secondary">Quiero Sofía Independiente →</a>
-      </div>
-
-      <!-- Plan Pro -->
-      <div class="plan-card plan-featured">
-        <div class="plan-popular">MÁS ELEGIDO</div>
-        <div class="plan-tag" style="color:var(--orange);border-color:rgba(244,121,32,0.3);">Mes a mes</div>
-        <div class="plan-name">Sofía Pro</div>
-        <div class="plan-desc">Sofía evoluciona contigo. Si tu negocio cambia — nuevos productos, temporadas, promociones — Sofía se actualiza. Soporte directo incluido todos los meses.</div>
-        <div class="plan-precio">
-          <span class="plan-old">$497 USD/mes</span>
-          <span class="plan-new">$247<span style="font-size:18px;color:var(--muted);font-weight:400"> USD/mes</span></span>
-        </div>
-        <ul class="plan-features">
-          <li>✅ Todo lo del plan Independiente</li>
-          <li>✅ Actualizaciones mensuales de Sofía</li>
-          <li>✅ Soporte directo con el equipo</li>
-          <li>✅ Ajustes ilimitados al mes</li>
-          <li>✅ Cancela cuando quieras</li>
-        </ul>
-        <a href="https://wa.me/5217751184278" target="_blank" class="plan-cta plan-cta-primary">Quiero Sofía Pro →</a>
-      </div>
-
-    </div>
-
-    <!-- Duda del plan -->
-    <div class="plan-duda reveal delay-4">
-      <p>¿Tu negocio cambia seguido? <span style="color:#fff;font-weight:600">Tenemos un plan de actualización continua.</span><br>Cuéntanos tu caso y te decimos cuál te conviene.</p>
-      <a href="https://wa.me/5217751184278" target="_blank" class="plan-duda-cta">Ayúdame a elegir →</a>
-    </div>
-
-    <p class="garantia reveal delay-4">// Implementación en 3 a 7 días · Sin contratos · Cancela el plan mensual cuando quieras</p>
+<!-- CTA FINAL -->
+<section class="cta-sec">
+  <div class="cta-box">
+    <div class="spots-badge">🔴 Solo 3 lugares disponibles este mes</div>
+    <h2>¿Tu negocio sigue perdiendo ventas <span class="orange">mañana también?</span></h2>
+    <p>Cada día sin Sofía es un prospecto que respondió la competencia. <strong>El momento de actuar no es pronto — es ahora.</strong></p>
+    <button class="cta-main" onclick="window.open('https://wa.me/7751184278','_blank')">📲 Quiero mi agente Sofía — hablar con el equipo</button>
+    <button class="cta-sec-btn" onclick="document.getElementById('selectorSec').scrollIntoView({behavior:'smooth'})">Primero quiero probar la demo gratis</button>
+    <div class="guarantee">Sin contratos largos · Activa en 48 horas · Soporte incluido</div>
   </div>
 </section>
 
-<!-- FAQ -->
-<section id="faq">
-  <div class="section-label reveal">Preguntas frecuentes</div>
-  <h2 class="section-title reveal delay-1">Ya sé lo que<br><span style="color:var(--orange)">estás pensando.</span></h2>
-  <div class="faq-list">
-    <div class="faq-item reveal delay-1">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Funciona para mi tipo de negocio?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a"><p>Si tienes clientes que llegan por WhatsApp, funciona. Así de simple. Coaches, infoproductores, inmobiliarias, clínicas, gimnasios, restaurantes — cualquier negocio que pierda leads por no responder rápido es un candidato perfecto.</p></div>
-    </div>
-    <div class="faq-item reveal delay-2">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Cuánto tiempo tarda en estar listo?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a"><p>Entre 3 y 7 días hábiles y tu negocio ya está respondiendo solo. Nosotros configuramos todo — tú solo nos das la información de tu negocio y revisas el resultado antes de activarlo.</p></div>
-    </div>
-    <div class="faq-item reveal delay-3">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Qué pasa si el cliente hace una pregunta difícil?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a"><p>Sofía lo escala a ti automáticamente con todo el contexto de la conversación. Nunca pierde el control de la situación y siempre mantiene la experiencia del cliente intacta.</p></div>
-    </div>
-    <div class="faq-item reveal delay-4">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Tengo que saber de tecnología?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a"><p>Cero. Nosotros configuramos absolutamente todo. Tú solo recibes los cierres. Si en algún momento necesitas un ajuste, nos escribes y lo resolvemos.</p></div>
-    </div>
-    <div class="faq-item reveal delay-5">
-      <button class="faq-q" onclick="toggleFaq(this)">
-        ¿Vale la pena la inversión?
-        <span class="faq-icon">+</span>
-      </button>
-      <div class="faq-a"><p>¿Cuánto te cuesta perder un lead a las 11pm porque nadie contestó? Un solo cliente recuperado ya paga el servicio completo. Los demás son pura ganancia.</p></div>
-    </div>
-  </div>
-  <div class="faq-cta reveal">
-    <p class="faq-cta-label">¿Tienes otra duda? La respondemos ahora mismo.</p>
-    <a href="https://wa.me/5217751184278" target="_blank" class="cta-primary">
-      Escribir ahora →
-    </a>
-  </div>
-</section>
-
-<!-- FOOTER -->
 <footer>
-  <div class="footer-brand">PULSE <span>OVERTURE</span> · Automatización con IA</div>
-  <div class="footer-copy">© 2026 Pulse Overture · México · pulseoverture.com</div>
+  <div class="ft-left">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="21" stroke="url(#ring2)" stroke-width="1.5"/>
+      <rect x="8" y="26" width="5" height="10" rx="1" fill="#3b5bdb" opacity=".7"/>
+      <rect x="15" y="20" width="5" height="16" rx="1" fill="#4c6ef5" opacity=".85"/>
+      <rect x="22" y="13" width="5" height="23" rx="1" fill="url(#bg2)"/>
+      <defs>
+        <linearGradient id="ring2" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#3b5bdb"/><stop offset="100%" stop-color="#f97316"/>
+        </linearGradient>
+        <linearGradient id="bg2" x1="22" y1="13" x2="27" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f97316"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="ft-copy">© 2026 Pulse Overture · Infraestructura IA</span>
+  </div>
+  <span class="ft-right">México y Latinoamérica</span>
 </footer>
 
+<!-- FLOAT WA -->
+<a class="float-wa" id="floatWa" href="https://wa.me/7751184278" target="_blank" aria-label="Escríbenos en WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
 <script>
-// ── Cursor ──
-const cursor = document.getElementById('cursor');
-const ring = document.getElementById('cursor-ring');
-let mx = 0, my = 0, rx = 0, ry = 0;
+const MAX_MSGS = 6;
+const PAINS = {
+  coach:'¿Cuántos leads te llegan mientras estás en sesión y no puedes atender? <strong>Sofía los atiende, califica y cierra mientras tú entrenas.</strong>',
+  info:'¿Cuántas ventas se enfrían esperando tu respuesta? <strong>Sofía cierra mientras tú creas contenido.</strong>',
+  clinica:'¿Cuántos pacientes llaman fuera de horario y no vuelven? <strong>Sofía agenda 24/7 sin que muevas un dedo.</strong>',
+  empresa:'¿Cuánto tiempo pierde tu equipo respondiendo las mismas preguntas? <strong>Sofía lo automatiza todo, sin contratar a nadie.</strong>',
+  restaurante:'¿Cuántas reservaciones pierdes porque nadie contestó el WhatsApp? <strong>Sofía nunca deja ir a un cliente.</strong>',
+  inmobiliaria:'¿Cuántos prospectos compraron con otro agente porque tardaste horas? <strong>Sofía actúa en segundos, siempre.</strong>'
+};
+const LABELS = {coach:'Coach',info:'Infoproductor',clinica:'Clínica',empresa:'Empresa',restaurante:'Restaurante',inmobiliaria:'Inmobiliaria'};
+const OPENERS = {
+  coach:'¡Hola! Soy Sofía 👋 Dime algo — ¿cuántos mensajes de clientes potenciales recibes a la semana cuando estás ocupado y no puedes atender?',
+  info:'¡Hola! Soy Sofía. Una pregunta directa: ¿cuántas personas te han escrito interesadas en tu producto y nunca compraron porque tardaste en responder o se enfriaron?',
+  clinica:'Hola, soy Sofía. ¿Cuántos mensajes llegan al WhatsApp de su clínica fuera del horario de atención, sin que nadie los responda?',
+  empresa:'Hola, soy Sofía. ¿Cuánto tiempo invierte tu equipo cada día respondiendo las mismas preguntas básicas de clientes?',
+  restaurante:'¡Hola! Soy Sofía. ¿Cuántas reservaciones o pedidos pierden por semana porque el WhatsApp no tuvo respuesta a tiempo?',
+  inmobiliaria:'Hola, soy Sofía. En bienes raíces el tiempo lo decide todo — ¿cuántos prospectos han comprado con la competencia porque tardaste unas horas en responder?'
+};
+const SYS = {
+  coach:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con un coach o mentor. Misión: hacerle ver que está perdiendo dinero cada hora sin un agente IA, y que Pulse Overture se lo resuelve. Usa los 3 cerebros: reptiliano (miedo a perder clientes y dinero), límbico (libertad y negocio que funciona solo), neocórtex (lógica del ROI). PNL activo: lenguaje sensorial, espejo, identidad futura. Cálida, directa, humana, nunca robótica ni presionosa. Máximo 3 oraciones por mensaje. Una sola pregunta a la vez. NUNCA menciones precios ni costos. Cuando detectes interés genuino, invita a hablar con el equipo en WhatsApp: https://wa.me/7751184278. Siempre en español.`,
+  info:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con un infoproductor. Misión: mostrar que cada hora sin responder es dinero perdido, y que Sofía vende por él 24/7. 3 cerebros activos. PNL activo. Cálida y directa. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés real: https://wa.me/7751184278. Siempre en español.`,
+  clinica:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con dueño/admin de clínica. Misión: mostrar el costo de perder pacientes por no responder. 3 cerebros activos. Profesional y cálida. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`,
+  empresa:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con dueño de empresa. Misión: mostrar cuánto dinero pierde sin automatización. 3 cerebros activos. Ejecutivo y directo. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`,
+  restaurante:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con dueño de restaurante. Misión: mostrar cuántos clientes se pierden por falta de respuesta. 3 cerebros activos. Amigable y concreto. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`,
+  inmobiliaria:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con agente/dueño de inmobiliaria. Misión: mostrar el costo de perder UNA venta por no dar seguimiento. 3 cerebros activos. Profesional y directo. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`
+};
 
-document.addEventListener('mousemove', e => {
-  mx = e.clientX; my = e.clientY;
-  cursor.style.left = mx + 'px';
-  cursor.style.top = my + 'px';
-});
+let nicho=null, hist=[], userMsgs=0, busy=false, ctaShown=false;
 
-function animRing() {
-  rx += (mx - rx) * 0.12;
-  ry += (my - ry) * 0.12;
-  ring.style.left = rx + 'px';
-  ring.style.top = ry + 'px';
-  requestAnimationFrame(animRing);
-}
-animRing();
+// Float WA delay
+setTimeout(()=>{document.getElementById('floatWa').style.opacity='1';}, 3000);
 
-document.querySelectorAll('a, button').forEach(el => {
-  el.addEventListener('mouseenter', () => { cursor.classList.add('hover'); ring.classList.add('hover'); });
-  el.addEventListener('mouseleave', () => { cursor.classList.remove('hover'); ring.classList.remove('hover'); });
-});
-
-// ── Hero Canvas ──
-const canvas = document.getElementById('hero-canvas');
-const ctx = canvas.getContext('2d');
-let W, H;
-
-function resize() {
-  W = canvas.width = canvas.offsetWidth;
-  H = canvas.height = canvas.offsetHeight;
-}
-resize();
-window.addEventListener('resize', resize);
-
-const pts = Array.from({length: 100}, () => ({
-  x: Math.random() * 1400,
-  y: Math.random() * 900 + 200,
-  r: Math.random() * 2 + 0.5,
-  vy: -(Math.random() * 0.5 + 0.15),
-  vx: (Math.random() - 0.5) * 0.25,
-  color: Math.random() < 0.55 ? '#3B45E0' : Math.random() < 0.6 ? '#F47920' : '#5B66FF',
-  alpha: Math.random() * 0.5 + 0.2,
-  pulse: Math.random() * Math.PI * 2,
-  drift: Math.random() * 0.015
-}));
-
-const stars = Array.from({length: 60}, () => ({
-  x: Math.random() * 1400,
-  y: Math.random() * 900 * 0.6,
-  r: Math.random() * 0.7 + 0.2,
-  alpha: Math.random() * 0.3 + 0.05,
-  tw: Math.random() * Math.PI * 2
-}));
-
-function drawHorizon() {
-  const grad = ctx.createRadialGradient(W/2, H * 0.8, 0, W/2, H * 0.8, W * 0.8);
-  grad.addColorStop(0, 'rgba(59,69,224,0.1)');
-  grad.addColorStop(0.5, 'rgba(244,121,32,0.04)');
-  grad.addColorStop(1, 'rgba(4,4,12,0)');
-  ctx.fillStyle = grad;
-  ctx.fillRect(0, 0, W, H);
-
-  const hLine = ctx.createLinearGradient(0, H*0.75, W, H*0.75);
-  hLine.addColorStop(0, 'rgba(59,69,224,0)');
-  hLine.addColorStop(0.35, 'rgba(59,69,224,0.12)');
-  hLine.addColorStop(0.5, 'rgba(244,121,32,0.18)');
-  hLine.addColorStop(0.65, 'rgba(59,69,224,0.12)');
-  hLine.addColorStop(1, 'rgba(59,69,224,0)');
-  ctx.beginPath();
-  ctx.moveTo(0, H*0.75); ctx.lineTo(W, H*0.75);
-  ctx.strokeStyle = hLine; ctx.lineWidth = 0.8; ctx.stroke();
+function pick(el, n){
+  document.querySelectorAll('.nc').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); nicho=n;
+  const pb=document.getElementById('painBar');
+  pb.innerHTML=`💡 ${PAINS[n]}`; pb.style.display='block';
+  const btn=document.getElementById('ctaDemo');
+  btn.classList.add('on'); btn.disabled=false;
 }
 
-function drawStars(t) {
-  stars.forEach(s => {
-    s.tw += 0.018;
-    const a = s.alpha * (0.6 + Math.sin(s.tw) * 0.4);
-    ctx.beginPath();
-    ctx.arc(s.x % W, s.y % H, s.r, 0, Math.PI * 2);
-    ctx.fillStyle = `rgba(255,255,255,${a})`;
-    ctx.fill();
-  });
+function goChat(){
+  document.getElementById('selectorSec').style.display='none';
+  const cw=document.getElementById('chatWrap');
+  cw.style.display='block';
+  cw.scrollIntoView({behavior:'smooth'});
+  document.getElementById('nichoTag').textContent=LABELS[nicho];
+  hist=[]; userMsgs=0; ctaShown=false;
+  addMsg('sofia', OPENERS[nicho]);
+  hist.push({role:'assistant', content:OPENERS[nicho]});
 }
 
-function drawParticles(t) {
-  for (let i = 0; i < pts.length; i++) {
-    for (let j = i + 1; j < pts.length; j++) {
-      const dx = pts[i].x - pts[j].x, dy = pts[i].y - pts[j].y;
-      const d = Math.sqrt(dx*dx + dy*dy);
-      if (d < 90) {
-        const a = (1 - d/90) * 0.07;
-        ctx.beginPath();
-        ctx.moveTo(pts[i].x, pts[i].y);
-        ctx.lineTo(pts[j].x, pts[j].y);
-        ctx.strokeStyle = pts[i].color + Math.round(a*255).toString(16).padStart(2,'0');
-        ctx.lineWidth = 0.4; ctx.stroke();
-      }
-    }
+async function send(){
+  if(busy) return;
+  if(userMsgs >= MAX_MSGS){ showLimit(); return; }
+  const inp=document.getElementById('chatIn');
+  const txt=inp.value.trim();
+  if(!txt) return;
+  inp.value=''; inp.style.height='auto';
+  addMsg('user', txt);
+  hist.push({role:'user', content:txt});
+  userMsgs++;
+  showTyping(); busy=true;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:300, system:SYS[nicho], messages:hist})
+    });
+    const d=await r.json();
+    hideTyping();
+    const rep=d.content?.[0]?.text || 'Hubo un problema. Intenta de nuevo.';
+    hist.push({role:'assistant', content:rep});
+    addMsg('sofia', rep);
+    if(userMsgs>=3 && !ctaShown){ ctaShown=true; setTimeout(showCta, 700); }
+    if(userMsgs >= MAX_MSGS){ setTimeout(showLimit, 400); }
+  }catch(e){
+    hideTyping();
+    addMsg('sofia','Hubo un problema de conexión. Intenta en un momento.');
   }
-  pts.forEach(p => {
-    p.pulse += 0.02;
-    p.x += p.vx + Math.sin(t * p.drift * 25) * 0.15;
-    p.y += p.vy;
-    if (p.y < -20) { p.y = H + 20; p.x = Math.random() * W; }
-    const prog = 1 - (p.y / H);
-    const fade = Math.min(1, prog * 3) * Math.min(1, (1-prog) * 5);
-    const a = p.alpha * Math.max(0, fade) * (0.7 + Math.sin(p.pulse) * 0.3);
-    const aHex = Math.round(Math.max(0,a)*255).toString(16).padStart(2,'0');
-    ctx.beginPath();
-    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-    ctx.fillStyle = p.color + aHex;
-    ctx.fill();
-  });
+  busy=false;
 }
 
-let last = 0, t = 0;
-function animate(ts) {
-  const dt = Math.min((ts-last)/1000, 0.05);
-  last = ts; t += dt;
-  ctx.clearRect(0, 0, W, H);
-  drawHorizon();
-  drawStars(t);
-  drawParticles(t);
-  requestAnimationFrame(animate);
+function addMsg(who, text){
+  const box=document.getElementById('msgs');
+  const d=document.createElement('div'); d.className=`msg ${who}`;
+  const av=who==='sofia'?'<div class="av-s">S</div>':'<div class="av-s" style="background:#1a1a30;font-size:14px">👤</div>';
+  d.innerHTML=`${who==='sofia'?av:''}<div class="bubble">${text}</div>${who==='user'?av:''}`;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
 }
-requestAnimationFrame(animate);
+function showTyping(){
+  const box=document.getElementById('msgs');
+  const d=document.createElement('div'); d.id='typ'; d.className='msg sofia';
+  d.innerHTML='<div class="av-s">S</div><div class="typing-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+function hideTyping(){ const t=document.getElementById('typ'); if(t)t.remove(); }
+function showCta(){ document.getElementById('waCta').style.display='block'; document.getElementById('msgs').scrollTop=99999; }
+function showLimit(){
+  const inp=document.getElementById('chatIn');
+  const btn=document.getElementById('sendBtn');
+  inp.disabled=true; btn.disabled=true;
+  const notice=document.getElementById('limitNotice');
+  notice.textContent='Has llegado al límite de la demo. Para seguir la conversación, habla con el equipo en WhatsApp 👇';
+  notice.style.display='block';
+  showCta();
+}
 
-// ── Scroll reveal ──
-const observer = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) { e.target.classList.add('visible'); }
-  });
-}, { threshold: 0.1, rootMargin: '0px 0px -50px 0px' });
-
-document.querySelectorAll('.reveal, .reveal-left, .reveal-right').forEach(el => observer.observe(el));
-
-// ── Nav scroll ──
-window.addEventListener('scroll', () => {
-  document.getElementById('navbar').classList.toggle('scrolled', window.scrollY > 50);
+// Auto-resize textarea
+document.getElementById('chatIn').addEventListener('input', function(){
+  this.style.height='auto';
+  this.style.height=Math.min(this.scrollHeight,120)+'px';
 });
-
-// ── Counter animation ──
-const countObserver = new IntersectionObserver(entries => {
-  entries.forEach(e => {
-    if (e.isIntersecting) {
-      const target = parseInt(e.target.dataset.target);
-      let current = 0;
-      const step = target / 60;
-      const timer = setInterval(() => {
-        current += step;
-        if (current >= target) { current = target; clearInterval(timer); }
-        e.target.textContent = Math.round(current);
-      }, 16);
-      countObserver.unobserve(e.target);
-    }
-  });
-}, { threshold: 0.5 });
-
-document.querySelectorAll('.count').forEach(el => countObserver.observe(el));
-
-// ── FAQ ──
-function toggleFaq(btn) {
-  const item = btn.closest('.faq-item');
-  const isOpen = item.classList.contains('open');
-  document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
-  if (!isOpen) item.classList.add('open');
-}
-
-// ── Chat animation ──
-setTimeout(() => {
-  const typing = document.getElementById('typing-indicator');
-  if (typing) typing.style.display = 'none';
-  const lastMsg = document.getElementById('last-msg');
-  if (lastMsg) lastMsg.style.display = 'block';
-  const respTime = document.getElementById('resp-time');
-  if (respTime) respTime.style.display = 'flex';
-}, 4000);
 </script>
 </body>
 </html>
+
