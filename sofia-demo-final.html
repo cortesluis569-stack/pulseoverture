@@ -1,0 +1,469 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Sofía — Demo en Vivo | Pulse Overture</title>
+<meta name="description" content="Habla con Sofía, el agente de IA que atiende, califica y cierra ventas por tu negocio 24/7.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;900&display=swap" rel="stylesheet">
+<style>
+*{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'Inter',sans-serif;background:#07070f;color:#fff;overflow-x:hidden;}
+
+/* URGENCY BAR */
+.urgency{background:linear-gradient(90deg,#7c3aed,#f97316);padding:9px 20px;text-align:center;font-size:13px;font-weight:700;letter-spacing:.3px;}
+.urgency em{background:rgba(0,0,0,.3);padding:2px 10px;border-radius:20px;font-style:normal;margin:0 4px;}
+
+/* NAV */
+nav{display:flex;align-items:center;justify-content:space-between;padding:16px 48px;border-bottom:1px solid rgba(255,255,255,.06);}
+.logo{display:flex;align-items:center;gap:12px;cursor:pointer;}
+.logo svg{width:44px;height:44px;}
+.logo-words{display:flex;flex-direction:column;}
+.logo-pulse{font-size:15px;font-weight:900;letter-spacing:2px;color:#fff;line-height:1;}
+.logo-overture{font-size:9px;font-weight:700;letter-spacing:4px;color:#f97316;margin-top:2px;}
+.nav-right{display:flex;gap:10px;}
+.btn-ghost{background:transparent;border:1px solid rgba(255,255,255,.2);color:rgba(255,255,255,.8);padding:9px 18px;border-radius:8px;font-size:13px;font-weight:600;cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.btn-ghost:hover{border-color:rgba(255,255,255,.5);color:#fff;}
+.btn-orange{background:linear-gradient(135deg,#f97316,#ea580c);border:none;color:#fff;padding:9px 20px;border-radius:8px;font-size:13px;font-weight:700;cursor:pointer;font-family:'Inter',sans-serif;transition:transform .15s;}
+.btn-orange:hover{transform:scale(1.03);}
+
+/* HERO */
+.hero{text-align:center;padding:72px 40px 52px;max-width:860px;margin:0 auto;}
+.hero-badge{display:inline-flex;align-items:center;gap:8px;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.25);color:#f97316;font-size:11px;font-weight:700;letter-spacing:3px;padding:7px 20px;border-radius:30px;margin-bottom:32px;text-transform:uppercase;}
+.badge-dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:pulse-dot 1.5s infinite;}
+@keyframes pulse-dot{0%,100%{opacity:1;transform:scale(1);}50%{opacity:.5;transform:scale(.7);}}
+.hero h1{font-size:clamp(40px,6.5vw,76px);font-weight:900;line-height:1.0;letter-spacing:-2.5px;margin-bottom:22px;}
+.hero h1 .orange{color:#f97316;}
+.hero h1 .dim{color:rgba(255,255,255,.85);}
+.hero-sub{font-size:clamp(16px,2.2vw,20px);color:rgba(255,255,255,.45);max-width:580px;margin:0 auto 48px;line-height:1.65;}
+.hero-sub strong{color:rgba(255,255,255,.75);}
+
+/* SELECTOR */
+.selector{padding:0 40px 52px;max-width:860px;margin:0 auto;}
+.sel-label{font-size:11px;font-weight:700;letter-spacing:3px;color:rgba(255,255,255,.25);text-align:center;margin-bottom:20px;text-transform:uppercase;}
+.nicho-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:24px;}
+.nc{background:#0c0c18;border:1px solid rgba(255,255,255,.07);border-radius:14px;padding:22px 14px 18px;cursor:pointer;text-align:center;transition:all .2s;position:relative;overflow:hidden;}
+.nc::after{content:'';position:absolute;inset:0;background:linear-gradient(135deg,rgba(249,115,22,.07),rgba(124,58,237,.07));opacity:0;transition:opacity .2s;}
+.nc:hover{border-color:rgba(249,115,22,.35);transform:translateY(-2px);}
+.nc:hover::after{opacity:1;}
+.nc.active{border-color:#f97316;background:#0f0c1a;}
+.nc.active::after{opacity:1;}
+.nc-icon{font-size:28px;margin-bottom:10px;display:block;}
+.nc-name{font-size:13px;font-weight:700;color:#fff;margin-bottom:4px;position:relative;z-index:1;}
+.nc-desc{font-size:11px;color:rgba(255,255,255,.35);line-height:1.4;position:relative;z-index:1;}
+
+.pain-bar{background:rgba(249,115,22,.07);border:1px solid rgba(249,115,22,.18);border-radius:10px;padding:14px 20px;font-size:13px;color:rgba(255,255,255,.55);text-align:center;margin-bottom:22px;display:none;line-height:1.6;}
+.pain-bar strong{color:#f97316;}
+
+.cta-demo{display:block;width:100%;max-width:440px;margin:0 auto;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:12px;padding:19px 28px;font-size:17px;font-weight:800;color:#fff;cursor:pointer;font-family:'Inter',sans-serif;letter-spacing:-.3px;opacity:.3;transition:all .25s;pointer-events:none;}
+.cta-demo.on{opacity:1;pointer-events:auto;}
+.cta-demo.on:hover{transform:scale(1.02);box-shadow:0 8px 32px rgba(249,115,22,.3);}
+
+.trust-row{display:flex;justify-content:center;gap:24px;margin-top:18px;flex-wrap:wrap;}
+.trust-item{font-size:12px;color:rgba(255,255,255,.28);display:flex;align-items:center;gap:7px;}
+.trust-dot{width:5px;height:5px;border-radius:50%;background:#f97316;flex-shrink:0;}
+
+/* CHAT */
+.chat-wrap{padding:0 40px 64px;max-width:680px;margin:0 auto;display:none;}
+.chat-card{background:#0c0c18;border:1px solid rgba(255,255,255,.08);border-radius:18px;overflow:hidden;}
+.chat-hd{padding:18px 22px;border-bottom:1px solid rgba(249,115,22,.12);display:flex;align-items:center;gap:14px;}
+.sofia-av{width:46px;height:46px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f97316);display:flex;align-items:center;justify-content:center;font-size:19px;font-weight:900;color:#fff;flex-shrink:0;border:2px solid rgba(249,115,22,.3);}
+.sofia-name{font-size:15px;font-weight:700;color:#fff;}
+.sofia-status{font-size:12px;color:#4ade80;margin-top:2px;display:flex;align-items:center;gap:5px;}
+.status-dot{width:7px;height:7px;border-radius:50%;background:#4ade80;animation:pulse-dot 1.5s infinite;}
+.nicho-pill{margin-left:auto;background:rgba(249,115,22,.1);border:1px solid rgba(249,115,22,.22);color:#f97316;font-size:11px;font-weight:700;padding:4px 13px;border-radius:20px;letter-spacing:.5px;}
+
+.msgs{height:380px;overflow-y:auto;padding:20px 18px;display:flex;flex-direction:column;gap:14px;scrollbar-width:thin;scrollbar-color:rgba(249,115,22,.12) transparent;}
+.msg{display:flex;gap:10px;max-width:90%;animation:slideUp .3s ease;}
+@keyframes slideUp{from{opacity:0;transform:translateY(8px);}to{opacity:1;transform:none;}}
+.msg.sofia{align-self:flex-start;}
+.msg.user{align-self:flex-end;flex-direction:row-reverse;}
+.av-s{width:32px;height:32px;border-radius:50%;background:linear-gradient(135deg,#7c3aed,#f97316);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;flex-shrink:0;margin-top:2px;}
+.bubble{padding:12px 16px;border-radius:18px;font-size:14px;line-height:1.6;}
+.msg.sofia .bubble{background:#14142a;border:1px solid rgba(255,255,255,.07);color:rgba(255,255,255,.88);border-top-left-radius:4px;}
+.msg.user .bubble{background:linear-gradient(135deg,#f97316,#ea580c);color:#fff;border-top-right-radius:4px;}
+.typing-row{display:flex;align-items:center;gap:5px;padding:12px 16px;background:#14142a;border:1px solid rgba(255,255,255,.07);border-radius:18px;border-top-left-radius:4px;width:fit-content;}
+.dot{width:7px;height:7px;border-radius:50%;background:#f97316;animation:bop 1.2s infinite;}
+.dot:nth-child(2){animation-delay:.2s;}.dot:nth-child(3){animation-delay:.4s;}
+@keyframes bop{0%,60%,100%{transform:translateY(0);opacity:.4;}30%{transform:translateY(-6px);opacity:1;}}
+
+.limit-notice{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.08);border-radius:10px;padding:10px 16px;text-align:center;font-size:12px;color:rgba(255,255,255,.3);margin:0 18px;}
+
+.chat-ft{padding:14px 18px;border-top:1px solid rgba(255,255,255,.06);display:flex;gap:10px;align-items:flex-end;}
+.chat-in{flex:1;background:#111128;border:1px solid rgba(255,255,255,.1);border-radius:10px;padding:12px 15px;font-size:14px;color:#fff;font-family:'Inter',sans-serif;resize:none;outline:none;transition:border-color .2s;line-height:1.45;}
+.chat-in:focus{border-color:rgba(249,115,22,.4);}
+.chat-in::placeholder{color:rgba(255,255,255,.18);}
+.chat-in:disabled{opacity:.4;cursor:not-allowed;}
+.send-btn{background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:10px;width:44px;height:44px;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:transform .15s;font-size:18px;color:#fff;}
+.send-btn:hover{transform:scale(1.08);}
+.send-btn:disabled{opacity:.4;cursor:not-allowed;}
+
+.wa-cta{margin:14px 18px;background:linear-gradient(135deg,rgba(37,211,102,.1),rgba(37,211,102,.05));border:1px solid rgba(37,211,102,.2);border-radius:12px;padding:18px;text-align:center;display:none;}
+.wa-cta p{font-size:13px;color:rgba(255,255,255,.55);margin-bottom:12px;line-height:1.55;}
+.wa-cta strong{color:#fff;}
+.wa-link{display:inline-flex;align-items:center;gap:9px;background:#25d366;color:#fff;text-decoration:none;padding:12px 26px;border-radius:10px;font-size:14px;font-weight:800;font-family:'Inter',sans-serif;transition:transform .15s;}
+.wa-link:hover{transform:scale(1.03);}
+
+/* DIVIDER */
+.divider{height:1px;background:linear-gradient(90deg,transparent,rgba(249,115,22,.15),transparent);margin:0 40px;}
+
+/* STATS */
+.stats-sec{padding:72px 40px;max-width:900px;margin:0 auto;}
+.sec-tag{font-size:11px;font-weight:700;letter-spacing:3px;color:#f97316;margin-bottom:14px;text-transform:uppercase;}
+.sec-h2{font-size:clamp(28px,4vw,46px);font-weight:900;letter-spacing:-1.5px;line-height:1.08;margin-bottom:48px;}
+.sec-h2 .orange{color:#f97316;}
+.stats-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px;}
+.stat-card{background:#0c0c18;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px 24px;}
+.stat-num{font-size:48px;font-weight:900;color:#f97316;line-height:1;margin-bottom:8px;letter-spacing:-2px;}
+.stat-text{font-size:14px;color:rgba(255,255,255,.5);line-height:1.6;}
+.stat-text strong{color:rgba(255,255,255,.85);}
+
+/* STEPS */
+.steps-sec{padding:0 40px 72px;max-width:900px;margin:0 auto;}
+.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;}
+.step{background:#0c0c18;border:1px solid rgba(255,255,255,.07);border-radius:16px;padding:28px 20px;position:relative;}
+.step-n{font-size:48px;font-weight:900;color:rgba(249,115,22,.12);line-height:1;margin-bottom:14px;}
+.step-title{font-size:15px;font-weight:700;margin-bottom:8px;}
+.step-desc{font-size:13px;color:rgba(255,255,255,.42);line-height:1.6;}
+.step-arrow{display:none;}
+
+/* OBJECIONES */
+.obj-sec{padding:0 40px 72px;max-width:900px;margin:0 auto;}
+.obj-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.obj{border-radius:14px;padding:22px 20px;border:1px solid;}
+.obj.myth{background:rgba(239,68,68,.04);border-color:rgba(239,68,68,.12);}
+.obj.truth{background:rgba(249,115,22,.05);border-color:rgba(249,115,22,.18);}
+.obj-lbl{font-size:10px;font-weight:700;letter-spacing:2px;margin-bottom:10px;text-transform:uppercase;}
+.obj.myth .obj-lbl{color:rgba(239,68,68,.7);}
+.obj.truth .obj-lbl{color:#f97316;}
+.obj-text{font-size:13px;color:rgba(255,255,255,.58);line-height:1.65;}
+.obj-text strong{color:rgba(255,255,255,.88);}
+
+/* CTA FINAL */
+.cta-sec{padding:0 40px 96px;max-width:700px;margin:0 auto;text-align:center;}
+.cta-box{background:#0c0c18;border:1px solid rgba(249,115,22,.2);border-radius:22px;padding:56px 48px;}
+.spots-badge{display:inline-block;background:rgba(239,68,68,.1);border:1px solid rgba(239,68,68,.2);color:#f87171;font-size:11px;font-weight:700;letter-spacing:2px;padding:5px 16px;border-radius:20px;margin-bottom:26px;text-transform:uppercase;}
+.cta-box h2{font-size:clamp(26px,4vw,40px);font-weight:900;letter-spacing:-1px;line-height:1.1;margin-bottom:14px;}
+.cta-box p{font-size:15px;color:rgba(255,255,255,.45);margin-bottom:36px;line-height:1.7;max-width:480px;margin-left:auto;margin-right:auto;}
+.cta-box p strong{color:rgba(255,255,255,.8);}
+.cta-main{display:block;width:100%;background:linear-gradient(135deg,#f97316,#ea580c);border:none;border-radius:12px;padding:19px 28px;font-size:16px;font-weight:800;color:#fff;cursor:pointer;font-family:'Inter',sans-serif;margin-bottom:12px;transition:all .2s;}
+.cta-main:hover{transform:scale(1.02);box-shadow:0 8px 40px rgba(249,115,22,.35);}
+.cta-sec-btn{display:block;width:100%;background:transparent;border:1px solid rgba(255,255,255,.12);border-radius:12px;padding:15px 28px;font-size:14px;font-weight:600;color:rgba(255,255,255,.5);cursor:pointer;font-family:'Inter',sans-serif;transition:all .2s;}
+.cta-sec-btn:hover{border-color:rgba(255,255,255,.3);color:rgba(255,255,255,.8);}
+.guarantee{margin-top:22px;font-size:12px;color:rgba(255,255,255,.22);line-height:1.8;}
+
+/* FOOTER */
+footer{border-top:1px solid rgba(255,255,255,.05);padding:24px 48px;display:flex;justify-content:space-between;align-items:center;}
+.ft-left{display:flex;align-items:center;gap:10px;}
+.ft-left svg{width:28px;height:28px;opacity:.7;}
+.ft-copy{font-size:12px;color:rgba(255,255,255,.2);}
+.ft-right{font-size:12px;color:rgba(255,255,255,.2);}
+
+/* FLOAT WA */
+.float-wa{position:fixed;bottom:24px;right:24px;z-index:999;background:#25d366;width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;box-shadow:0 4px 20px rgba(37,211,102,.4);cursor:pointer;text-decoration:none;opacity:0;transition:opacity .4s,transform .2s;}
+.float-wa:hover{transform:scale(1.08);}
+.float-wa svg{width:28px;height:28px;fill:#fff;}
+
+@media(max-width:640px){
+  nav{padding:14px 18px;}
+  .hero{padding:48px 18px 36px;}
+  .selector{padding:0 18px 40px;}
+  .nicho-grid{grid-template-columns:1fr 1fr;}
+  .chat-wrap{padding:0 18px 48px;}
+  .stats-sec,.steps-sec,.obj-sec{padding-left:18px;padding-right:18px;}
+  .stats-grid{grid-template-columns:1fr;}
+  .steps-grid{grid-template-columns:1fr;}
+  .obj-grid{grid-template-columns:1fr;}
+  .cta-sec{padding:0 18px 64px;}
+  .cta-box{padding:36px 22px;}
+  footer{padding:20px 18px;flex-direction:column;gap:10px;text-align:center;}
+}
+</style>
+</head>
+<body>
+
+<div class="urgency">🔴 Solo aceptamos <em>3 nuevos clientes</em> este mes para garantizar calidad — quedan lugares</div>
+
+<nav>
+  <div class="logo" onclick="window.open('https://pulseoverture.com','_blank')">
+    <!-- LOGO REAL PULSE OVERTURE como SVG -->
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="21" stroke="url(#ring)" stroke-width="1.5"/>
+      <!-- barras estilo barras de señal/stats -->
+      <rect x="8" y="26" width="5" height="10" rx="1" fill="#3b5bdb" opacity=".7"/>
+      <rect x="15" y="20" width="5" height="16" rx="1" fill="#4c6ef5" opacity=".85"/>
+      <rect x="22" y="13" width="5" height="23" rx="1" fill="url(#bar-gold)"/>
+      <defs>
+        <linearGradient id="ring" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#3b5bdb"/>
+          <stop offset="100%" stop-color="#f97316"/>
+        </linearGradient>
+        <linearGradient id="bar-gold" x1="22" y1="13" x2="27" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fbbf24"/>
+          <stop offset="100%" stop-color="#f97316"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <div class="logo-words">
+      <span class="logo-pulse">PULSE</span>
+      <span class="logo-overture">OVERTURE</span>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="btn-ghost" onclick="window.open('https://wa.me/7751184278','_blank')">📱 WhatsApp</button>
+    <button class="btn-orange" onclick="window.open('https://wa.me/7751184278','_blank')">Quiero mi agente</button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="badge-dot"></span>Demo en vivo · IA Real · Sin registro</div>
+  <h1>
+    <span class="dim">Mientras tú duermes,</span><br>
+    <span class="orange">tu negocio cierra ventas.</span>
+  </h1>
+  <p class="hero-sub">No es un chatbot de botones. Es <strong>Sofía</strong> — tu mejor vendedora, activa 24/7, sin sueldo, sin descansos. Elige tu negocio y habla con ella ahora mismo.</p>
+</section>
+
+<!-- NICHO SELECTOR -->
+<div class="selector" id="selectorSec">
+  <div class="sel-label">¿Cuál es tu negocio?</div>
+  <div class="nicho-grid">
+    <div class="nc" onclick="pick(this,'coach')"><span class="nc-icon">🎯</span><div class="nc-name">Coach / Mentor</div><div class="nc-desc">Cierra clientes mientras entrenas</div></div>
+    <div class="nc" onclick="pick(this,'info')"><span class="nc-icon">🚀</span><div class="nc-name">Infoproductor</div><div class="nc-desc">Vende cursos en automático</div></div>
+    <div class="nc" onclick="pick(this,'clinica')"><span class="nc-icon">🏥</span><div class="nc-name">Clínica / Salud</div><div class="nc-desc">Agenda sin recepcionista</div></div>
+    <div class="nc" onclick="pick(this,'empresa')"><span class="nc-icon">🏢</span><div class="nc-name">Empresa / Servicios</div><div class="nc-desc">Escala sin contratar</div></div>
+    <div class="nc" onclick="pick(this,'restaurante')"><span class="nc-icon">🍽️</span><div class="nc-name">Restaurante</div><div class="nc-desc">Mesas siempre llenas</div></div>
+    <div class="nc" onclick="pick(this,'inmobiliaria')"><span class="nc-icon">🏠</span><div class="nc-name">Inmobiliaria</div><div class="nc-desc">Cada prospecto atendido</div></div>
+  </div>
+  <div class="pain-bar" id="painBar"></div>
+  <button class="cta-demo" id="ctaDemo" onclick="goChat()">🔥 Hablar con Sofía ahora — gratis →</button>
+  <div class="trust-row">
+    <div class="trust-item"><div class="trust-dot"></div>Sin registro</div>
+    <div class="trust-item"><div class="trust-dot"></div>Responde en segundos</div>
+    <div class="trust-item"><div class="trust-dot"></div>IA real, no guión</div>
+    <div class="trust-item"><div class="trust-dot"></div>Adaptada a tu nicho</div>
+  </div>
+</div>
+
+<!-- CHAT -->
+<div class="chat-wrap" id="chatWrap">
+  <div class="chat-card">
+    <div class="chat-hd">
+      <div class="sofia-av">S</div>
+      <div>
+        <div class="sofia-name">Sofía · Pulse Overture</div>
+        <div class="sofia-status"><span class="status-dot"></span>En línea ahora</div>
+      </div>
+      <div class="nicho-pill" id="nichoTag"></div>
+    </div>
+    <div class="msgs" id="msgs"></div>
+    <div class="limit-notice" id="limitNotice" style="display:none;padding:10px 16px;"></div>
+    <div class="chat-ft">
+      <textarea class="chat-in" id="chatIn" rows="1" placeholder="Escríbele a Sofía..." onkeydown="if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();send();}"></textarea>
+      <button class="send-btn" id="sendBtn" onclick="send()">➤</button>
+    </div>
+    <div class="wa-cta" id="waCta">
+      <p>Sofía ya está trabajando por cientos de negocios como el tuyo.<br><strong>¿Quieres verla operar en tu WhatsApp real?</strong></p>
+      <a class="wa-link" href="https://wa.me/7751184278" target="_blank">📲 Hablar con el equipo ahora</a>
+    </div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- STATS -->
+<section class="stats-sec">
+  <div class="sec-tag">El problema real</div>
+  <h2 class="sec-h2">Cada hora sin responder<br><span class="orange">es dinero que se fue.</span></h2>
+  <div class="stats-grid">
+    <div class="stat-card"><div class="stat-num">78%</div><div class="stat-text"><strong>de los prospectos compran al primero que responde.</strong> No al mejor. Al más rápido.</div></div>
+    <div class="stat-card"><div class="stat-num">9 min</div><div class="stat-text">Es el tiempo máximo que espera un prospecto antes de <strong>irse con tu competencia. Para siempre.</strong></div></div>
+    <div class="stat-card"><div class="stat-num">$0</div><div class="stat-text">Genera tu negocio cuando estás <strong>durmiendo, en reunión o de vacaciones.</strong> Sin IA.</div></div>
+    <div class="stat-card"><div class="stat-num">24/7</div><div class="stat-text">Es cuando tus clientes tienen dudas. <strong>No solo en tu horario de oficina.</strong></div></div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section class="steps-sec">
+  <div class="sec-tag">Cómo funciona</div>
+  <h2 class="sec-h2">3 pasos. Tu negocio<br><span class="orange">en piloto automático.</span></h2>
+  <div class="steps-grid">
+    <div class="step"><div class="step-n">01</div><div class="step-title">Configuramos a Sofía</div><div class="step-desc">En 48 horas Sofía aprende tu negocio, tus productos, tu forma de hablar y tus objeciones más frecuentes.</div></div>
+    <div class="step"><div class="step-n">02</div><div class="step-title">Sofía atiende a tus leads</div><div class="step-desc">Responde, califica y guía al prospecto hacia el cierre — sola, a cualquier hora, sin que tú muevas un dedo.</div></div>
+    <div class="step"><div class="step-n">03</div><div class="step-title">Tú recibes clientes listos</div><div class="step-desc">Solo apareces cuando el prospecto ya quiere comprar. Sofía hizo todo el trabajo previo.</div></div>
+  </div>
+</section>
+
+<!-- OBJECIONES -->
+<section class="obj-sec">
+  <div class="sec-tag">Lo que crees vs la realidad</div>
+  <h2 class="sec-h2">Las excusas que le cuestan<br><span class="orange">más caro de lo que crees.</span></h2>
+  <div class="obj-grid">
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"Los chatbots suenan robóticos y espantan a mis clientes."</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text"><strong>Sofía no es un chatbot.</strong> Lee el contexto, adapta su tono y responde como una vendedora humana experta en tu negocio.</div></div>
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"Prefiero atender yo personalmente a mis clientes."</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text">Sofía <strong>filtra y calienta</strong> al prospecto. Tú solo apareces con quien ya quiere comprar.</div></div>
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"No estoy listo todavía para esto."</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text"><strong>Cada día que esperas</strong> es un prospecto que respondió tu competencia. El momento perfecto no existe.</div></div>
+    <div class="obj myth"><div class="obj-lbl">❌ Lo que crees</div><div class="obj-text">"¿Y si Sofía dice algo mal a un cliente?"</div></div>
+    <div class="obj truth"><div class="obj-lbl">✅ La realidad</div><div class="obj-text"><strong>Tú tienes el control total.</strong> Si detecta algo complejo, te avisa y escala contigo. Nunca opera fuera de tus parámetros.</div></div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-sec">
+  <div class="cta-box">
+    <div class="spots-badge">🔴 Solo 3 lugares disponibles este mes</div>
+    <h2>¿Tu negocio sigue perdiendo ventas <span class="orange">mañana también?</span></h2>
+    <p>Cada día sin Sofía es un prospecto que respondió la competencia. <strong>El momento de actuar no es pronto — es ahora.</strong></p>
+    <button class="cta-main" onclick="window.open('https://wa.me/7751184278','_blank')">📲 Quiero mi agente Sofía — hablar con el equipo</button>
+    <button class="cta-sec-btn" onclick="document.getElementById('selectorSec').scrollIntoView({behavior:'smooth'})">Primero quiero probar la demo gratis</button>
+    <div class="guarantee">Sin contratos largos · Activa en 48 horas · Soporte incluido</div>
+  </div>
+</section>
+
+<footer>
+  <div class="ft-left">
+    <svg viewBox="0 0 44 44" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="22" cy="22" r="21" stroke="url(#ring2)" stroke-width="1.5"/>
+      <rect x="8" y="26" width="5" height="10" rx="1" fill="#3b5bdb" opacity=".7"/>
+      <rect x="15" y="20" width="5" height="16" rx="1" fill="#4c6ef5" opacity=".85"/>
+      <rect x="22" y="13" width="5" height="23" rx="1" fill="url(#bg2)"/>
+      <defs>
+        <linearGradient id="ring2" x1="0" y1="0" x2="44" y2="44" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#3b5bdb"/><stop offset="100%" stop-color="#f97316"/>
+        </linearGradient>
+        <linearGradient id="bg2" x1="22" y1="13" x2="27" y2="36" gradientUnits="userSpaceOnUse">
+          <stop offset="0%" stop-color="#fbbf24"/><stop offset="100%" stop-color="#f97316"/>
+        </linearGradient>
+      </defs>
+    </svg>
+    <span class="ft-copy">© 2026 Pulse Overture · Infraestructura IA</span>
+  </div>
+  <span class="ft-right">México y Latinoamérica</span>
+</footer>
+
+<!-- FLOAT WA -->
+<a class="float-wa" id="floatWa" href="https://wa.me/7751184278" target="_blank" aria-label="Escríbenos en WhatsApp">
+  <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413Z"/></svg>
+</a>
+
+<script>
+const MAX_MSGS = 6;
+const PAINS = {
+  coach:'¿Cuántos leads te llegan mientras estás en sesión y no puedes atender? <strong>Sofía los atiende, califica y cierra mientras tú entrenas.</strong>',
+  info:'¿Cuántas ventas se enfrían esperando tu respuesta? <strong>Sofía cierra mientras tú creas contenido.</strong>',
+  clinica:'¿Cuántos pacientes llaman fuera de horario y no vuelven? <strong>Sofía agenda 24/7 sin que muevas un dedo.</strong>',
+  empresa:'¿Cuánto tiempo pierde tu equipo respondiendo las mismas preguntas? <strong>Sofía lo automatiza todo, sin contratar a nadie.</strong>',
+  restaurante:'¿Cuántas reservaciones pierdes porque nadie contestó el WhatsApp? <strong>Sofía nunca deja ir a un cliente.</strong>',
+  inmobiliaria:'¿Cuántos prospectos compraron con otro agente porque tardaste horas? <strong>Sofía actúa en segundos, siempre.</strong>'
+};
+const LABELS = {coach:'Coach',info:'Infoproductor',clinica:'Clínica',empresa:'Empresa',restaurante:'Restaurante',inmobiliaria:'Inmobiliaria'};
+const OPENERS = {
+  coach:'¡Hola! Soy Sofía 👋 Dime algo — ¿cuántos mensajes de clientes potenciales recibes a la semana cuando estás ocupado y no puedes atender?',
+  info:'¡Hola! Soy Sofía. Una pregunta directa: ¿cuántas personas te han escrito interesadas en tu producto y nunca compraron porque tardaste en responder o se enfriaron?',
+  clinica:'Hola, soy Sofía. ¿Cuántos mensajes llegan al WhatsApp de su clínica fuera del horario de atención, sin que nadie los responda?',
+  empresa:'Hola, soy Sofía. ¿Cuánto tiempo invierte tu equipo cada día respondiendo las mismas preguntas básicas de clientes?',
+  restaurante:'¡Hola! Soy Sofía. ¿Cuántas reservaciones o pedidos pierden por semana porque el WhatsApp no tuvo respuesta a tiempo?',
+  inmobiliaria:'Hola, soy Sofía. En bienes raíces el tiempo lo decide todo — ¿cuántos prospectos han comprado con la competencia porque tardaste unas horas en responder?'
+};
+const SYS = {
+  coach:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con un coach o mentor. Misión: hacerle ver que está perdiendo dinero cada hora sin un agente IA, y que Pulse Overture se lo resuelve. Usa los 3 cerebros: reptiliano (miedo a perder clientes y dinero), límbico (libertad y negocio que funciona solo), neocórtex (lógica del ROI). PNL activo: lenguaje sensorial, espejo, identidad futura. Cálida, directa, humana, nunca robótica ni presionosa. Máximo 3 oraciones por mensaje. Una sola pregunta a la vez. NUNCA menciones precios ni costos. Cuando detectes interés genuino, invita a hablar con el equipo en WhatsApp: https://wa.me/7751184278. Siempre en español.`,
+  info:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con un infoproductor. Misión: mostrar que cada hora sin responder es dinero perdido, y que Sofía vende por él 24/7. 3 cerebros activos. PNL activo. Cálida y directa. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés real: https://wa.me/7751184278. Siempre en español.`,
+  clinica:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con dueño/admin de clínica. Misión: mostrar el costo de perder pacientes por no responder. 3 cerebros activos. Profesional y cálida. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`,
+  empresa:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con dueño de empresa. Misión: mostrar cuánto dinero pierde sin automatización. 3 cerebros activos. Ejecutivo y directo. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`,
+  restaurante:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con dueño de restaurante. Misión: mostrar cuántos clientes se pierden por falta de respuesta. 3 cerebros activos. Amigable y concreto. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`,
+  inmobiliaria:`Eres Sofía, agente de ventas IA de Pulse Overture. Hablas con agente/dueño de inmobiliaria. Misión: mostrar el costo de perder UNA venta por no dar seguimiento. 3 cerebros activos. Profesional y directo. Máx 3 oraciones. NUNCA menciones precios. Al detectar interés: https://wa.me/7751184278. Siempre en español.`
+};
+
+let nicho=null, hist=[], userMsgs=0, busy=false, ctaShown=false;
+
+// Float WA delay
+setTimeout(()=>{document.getElementById('floatWa').style.opacity='1';}, 3000);
+
+function pick(el, n){
+  document.querySelectorAll('.nc').forEach(c=>c.classList.remove('active'));
+  el.classList.add('active'); nicho=n;
+  const pb=document.getElementById('painBar');
+  pb.innerHTML=`💡 ${PAINS[n]}`; pb.style.display='block';
+  const btn=document.getElementById('ctaDemo');
+  btn.classList.add('on'); btn.disabled=false;
+}
+
+function goChat(){
+  document.getElementById('selectorSec').style.display='none';
+  const cw=document.getElementById('chatWrap');
+  cw.style.display='block';
+  cw.scrollIntoView({behavior:'smooth'});
+  document.getElementById('nichoTag').textContent=LABELS[nicho];
+  hist=[]; userMsgs=0; ctaShown=false;
+  addMsg('sofia', OPENERS[nicho]);
+  hist.push({role:'assistant', content:OPENERS[nicho]});
+}
+
+async function send(){
+  if(busy) return;
+  if(userMsgs >= MAX_MSGS){ showLimit(); return; }
+  const inp=document.getElementById('chatIn');
+  const txt=inp.value.trim();
+  if(!txt) return;
+  inp.value=''; inp.style.height='auto';
+  addMsg('user', txt);
+  hist.push({role:'user', content:txt});
+  userMsgs++;
+  showTyping(); busy=true;
+  try{
+    const r=await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body:JSON.stringify({model:'claude-sonnet-4-20250514', max_tokens:300, system:SYS[nicho], messages:hist})
+    });
+    const d=await r.json();
+    hideTyping();
+    const rep=d.content?.[0]?.text || 'Hubo un problema. Intenta de nuevo.';
+    hist.push({role:'assistant', content:rep});
+    addMsg('sofia', rep);
+    if(userMsgs>=3 && !ctaShown){ ctaShown=true; setTimeout(showCta, 700); }
+    if(userMsgs >= MAX_MSGS){ setTimeout(showLimit, 400); }
+  }catch(e){
+    hideTyping();
+    addMsg('sofia','Hubo un problema de conexión. Intenta en un momento.');
+  }
+  busy=false;
+}
+
+function addMsg(who, text){
+  const box=document.getElementById('msgs');
+  const d=document.createElement('div'); d.className=`msg ${who}`;
+  const av=who==='sofia'?'<div class="av-s">S</div>':'<div class="av-s" style="background:#1a1a30;font-size:14px">👤</div>';
+  d.innerHTML=`${who==='sofia'?av:''}<div class="bubble">${text}</div>${who==='user'?av:''}`;
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+function showTyping(){
+  const box=document.getElementById('msgs');
+  const d=document.createElement('div'); d.id='typ'; d.className='msg sofia';
+  d.innerHTML='<div class="av-s">S</div><div class="typing-row"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>';
+  box.appendChild(d); box.scrollTop=box.scrollHeight;
+}
+function hideTyping(){ const t=document.getElementById('typ'); if(t)t.remove(); }
+function showCta(){ document.getElementById('waCta').style.display='block'; document.getElementById('msgs').scrollTop=99999; }
+function showLimit(){
+  const inp=document.getElementById('chatIn');
+  const btn=document.getElementById('sendBtn');
+  inp.disabled=true; btn.disabled=true;
+  const notice=document.getElementById('limitNotice');
+  notice.textContent='Has llegado al límite de la demo. Para seguir la conversación, habla con el equipo en WhatsApp 👇';
+  notice.style.display='block';
+  showCta();
+}
+
+// Auto-resize textarea
+document.getElementById('chatIn').addEventListener('input', function(){
+  this.style.height='auto';
+  this.style.height=Math.min(this.scrollHeight,120)+'px';
+});
+</script>
+</body>
+</html>
