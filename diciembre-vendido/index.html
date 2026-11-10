@@ -117,7 +117,7 @@ h2{font-family:var(--disp);font-weight:400;font-size:clamp(44px,9vw,80px);line-h
 .u{background:rgba(13,17,48,.85);border:1px solid var(--line);border-radius:12px;padding:8px 0;width:66px;text-align:center}
 .u b{display:block;font-family:var(--disp);font-size:34px;line-height:1;font-weight:400;font-variant-numeric:tabular-nums}
 .u small{font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:var(--mut)}
-.count .lbl{font-size:13px;color:var(--mut);max-width:150px;line-height:1.3;margin-left:4px}
+.count .lbl{font-size:14px;color:#ffb4a8;max-width:240px;line-height:1.35;margin-left:4px}.count .lbl b{color:#fff}
 .cluster{position:relative;height:470px;max-width:430px;margin:0 auto;width:100%}
 .cluster .k{position:absolute}
 .cl-c{left:50%;top:6px;transform:translateX(-42%);z-index:3}
@@ -387,7 +387,7 @@ footer p{max-width:60ch;margin:8px auto 0}
         <span class="badge">Para negocios de productos y servicios que venden por Instagram y WhatsApp</span>
         <h1>¿Otro diciembre viendo cómo <span class="glow">venden los demás?</span></h1>
         <p class="lead">Cada mañana recibes tu <strong>tarea de ventas lista para copiar y pegar</strong>. Del Buen Fin a Nochebuena. <strong>15 minutos al día.</strong></p>
-        <a class="cta js-buy" href="#oferta"><span>Quiero vender este diciembre<small>Pago seguro · Acceso inmediato · <span class="pnow">$147</span> MXN + IVA</small></span><span class="arr">➜</span></a>
+        <a class="cta js-buy" href="#oferta"><span>No quiero otro diciembre en ceros<small>Pago seguro · Acceso inmediato · <span class="pnow">$147</span> MXN + IVA</small></span><span class="arr">➜</span></a>
         <div class="trust"><span>🔒 Pago seguro</span><span>💳 Tarjeta u OXXO</span><span>⚡ Acceso inmediato</span><span>🛡️ Garantía 7 días</span></div>
         <div class="count" id="count"></div>
       </div>
@@ -742,8 +742,8 @@ document.getElementById('gd').textContent=C.GARANTIA_DIAS;document.querySelector
   function parts(ms){let s=Math.max(0,Math.floor(ms/1000));const d=Math.floor(s/86400);s%=86400;const h=Math.floor(s/3600);s%=3600;const m=Math.floor(s/60);return[d,h,m,s%60]}
   function tick(){
     const now=new Date();let target,msg,lbl;
-    if(now<t1){target=t1;msg='⏰ TU DÍA 1 LLEGA EN';lbl='para tu Día 1. Entra antes y no empiezas tarde';urg.textContent='⏰ Tu plan arranca en'}
-    else if(now<t2){target=t2;msg='🔥 DICIEMBRE SE ACABA EN';lbl='para vender este diciembre';urg.textContent='🔥 Te quedan para vender';if(af3)af3.textContent='Empiezas hoy mismo'}
+    if(now<t1){target=t1;msg='⚠️ EL BUEN FIN ARRANCA EN';lbl='<b>Cuando llegue a cero</b>, tu competencia ya estará vendiendo… y tú seguirás preguntándote qué subir.';urg.textContent='⚠️ El Buen Fin arranca en. Después, empiezas tarde'}
+    else if(now<t2){const ido=Math.max(1,Math.floor((now-t1)/864e5));target=t2;msg='🔥 YA SE FUERON '+ido+' DÍAS DE VENTAS · DICIEMBRE SE ACABA EN';lbl='<b>Ya se fueron '+ido+(ido>1?' días':' día')+' de ventas.</b> No regresan. Lo que no vendas, se lo lleva otro.';urg.textContent='🔥 Ya perdiste '+ido+(ido>1?' días':' día')+'. Te quedan';if(af3)af3.textContent='Empiezas hoy mismo'}
     else{bar.textContent='Diciembre Vendido';cnt.innerHTML='';clock.innerHTML='';urg.textContent='';if(tm)tm.textContent='';return}
     const [d,h,m,s]=parts(target-now),t=(d?d+'d ':'')+p2(h)+':'+p2(m)+':'+p2(s);
     bar.innerHTML=msg+' <b>'+t+'</b>';
